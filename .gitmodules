@@ -1,3 +1,3 @@
-[submodule "themes/hugo-docs-theme"]
-	path = themes/hugo-docs-theme
-	url = https://github.com/miniohq/hugo-docs-theme
+[submodule "themes/kes-docs-theme"]
+	path = themes/kes-docs-theme
+	url = https://github.com/minio/kes-docs-theme

@@ -9,65 +9,82 @@ tableOfContents: true
 Architecture
 -------------
 
-### Components
+## Components
 
-DirectPV is made up of 5 components:
+DirectPV has 5 components:
 
-| Component         | Description                                                                           |
-|-------------------|---------------------------------------------------------------------------------------|
-| CSI Driver        | Performs mounting, unmounting of provisioned volumes                                  |
-| CSI Controller    | Responsible for scheduling and detaching volumes on the nodes                         |
-| Drive Controller  | Formats and manages drive lifecycle                                                   |
-| Volume Controller | Manages volume lifecycle                                                              |
-| Drive Discovery   | Discovers and monitors the drives and their states on the nodes                       |
+1. **CSI Driver**
+   Mounts or unmounts provisioned volumes
+2. **CSI Controller**
+   Schedules and detaches volumes on nodes 
+3. **Drive Controller**
+   Formats and manages drive lifecycle
+4. **Volume Controller**
+   Manages volume lifecycle
+5. **Drive Discovery** 
+   Discovers drives and monitors their status on nodes
 
-The 4 components run as two different pods. 
+These components run on two pods in the Kubernetes environment:
 
-| Name                          | Components                                                            | Description                        |
-|-------------------------------|-----------------------------------------------------------------------|------------------------------------|
-| DirectPV Node Driver         | CSI Driver, Driver Controller, Volume Controller, Drive Discovery     | runs on every node as a DaemonSet  |
-| DirectPV Central Controller  | CSI Controller                                                        | runs as a deployment               |
+1. **DirectPV Node Driver DaemonSet**
+   Contains the CSI Driver, Driver Controller, Volume Controller, and Drive Discovery as a [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/)
+2. **DirectPV Central Controller**
+   Runs the CSI Controller as a [deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 
 
-### Scalability
+## Scalability
 
-Since the node driver runs on every node, the load on it is constrained to operations specific to that node. 
+The Node Driver DaemonSet runs on each node, performing only operations specific to its node.
 
-The central controller needs to be scaled up as the number of drives managed by DirectPV is increased. By default, 3 replicas of central controller are run. As a rule of thumb, having as many central controller instances as etcd nodes is a good working solution for achieving high scale.
+The Central Controller deployment should scale up as the number of drives managed by DirectPV increases. 
+By default, DirectPV runs 3 replicas of the Central Controller. 
+As a general guideline for high scale performance, have as many Central Controller replicas as you have etcd nodes.
 
-### Availability
+## Availability
 
-If node driver is down, then volume mounting, unmounting, formatting and cleanup will not proceed for volumes and drives on that node. In order to restore operations, bring node driver to running status.
+If a node's Node Driver DaemonSet is down, then volume mounting, unmounting, formatting and cleanup cannot proceed for volumes and drives on that node. 
+In order to restore operations, restore the Node Driver DaemonSet to running status.
 
-In central controller is down, then volume scheduling and deletion will not proceed for all volumes and drives in the DirectPV cluster. In order to restore operations, bring the central controller to running status.
+If the Central Controller deployment is down, then volume scheduling and deletion cannot proceed for any volume or drives throughout the entire DirectPV cluster. 
+To restore operations, bring the Central Controller to running status.
 
-Security is covered [here](./security.md)
+## Security
 
-### Node Driver
+For information on security in DirectPV, see the [security page]({{< relref "concepts/security.md" >}})
 
-This runs on every node as a Daemonset in `directpv` namespace. Each pod consists of four containers
+## Node Driver
 
-#### Node driver registrar
+The Node Driver runs on every node in the `directpv` namespace as a [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/). 
+Each pod consists of four containers for the CSI Driver, Driver Controller, Volume Controller, and Drive Discovery.
 
-This is a kubernetes csi side-car container which registers the `directpv` CSI driver with kubelet. This registration is necessary for kubelet to issue CSI RPC calls like `NodeGetInfo`, `NodeStageVolume`, `NodePublishVolume` to the corresponding nodes.
+### Node driver registrar
+
+TThe Node Driver Registrar works as a Kubernetes CSI sidecar container to register the `directpv` CSI driver with kubelet. 
+This registration is necessary for kubelet to issue CSI RPC calls like `NodeGetInfo`, `NodeStageVolume`, `NodePublishVolume` to the corresponding nodes.
 
 For more details, please refer [node-driver-registrar](https://github.com/kubernetes-csi/node-driver-registrar).
 
-#### Livenessprobe
+### Livenessprobe
 
-This is a kubernetes csi side-car container which exposes an HTTP `/healthz` endpoint as a liveness hook. This endpoint will be used by kubernetes for csi-driver liveness checks.
+This is a kubernetes csi side-car container which exposes an HTTP `/healthz` endpoint as a liveness hook. 
+This endpoint will be used by kubernetes for csi-driver liveness checks.
 
-For more details. please refer [livenessprobe](https://github.com/kubernetes-csi/livenessprobe)
+For more details, see the [Kubernetes csi repository on livenessprobe](https://github.com/kubernetes-csi/livenessprobe)
 
-#### Dynamic drive discovery
+### Dynamic drive discovery
 
-This container uses `directpv` binary with `--dynamic-drive-handler` flag enabled. This container is responsible for discovering and managing the drives in the node.
+This container uses `directpv` binary with `--dynamic-drive-handler` flag enabled. 
+This container is responsible for discovering and managing the drives in the node.
 
-The devices will be discovered from `/run/data/udev/` directory and dynamically listens for udev events for any add, change and remove uevents. Apart from dynamically listening, there is a periodic 30sec sync which checks and syncs the drive states.
+The devices will be discovered from `/run/data/udev/` directory and dynamically listens for udev events for any add, change and remove uevents. 
+Apart from dynamically listening, there is a periodic 30sec sync which checks and syncs the drive states.
 
-For any change, the directcsidrive object will be synced to match the local state. A new directcsidrive object will be created when a new device is detected during sync or when an "Add" uevent occurs. If an inuse/ready drive gets corrupted or lost, it will be tagged with a error condition on the drive. If an Available/Unavailable drive is lost, it will be deleted.
+For any change, the directcsidrive object will be synced to match the local state. 
+A new directcsidrive object will be created when a new device is detected during sync or when an "Add" uevent occurs. 
+If an inuse/ready drive gets corrupted or lost, it will be tagged with a error condition on the drive. 
+If an Available/Unavailable drive is lost, it will be deleted.
 
-#### DirectPV
+### DirectPV
 
 This container acts as a node plugin and implements the following node service RPCs.
 
@@ -79,13 +96,17 @@ This container acts as a node plugin and implements the following node service R
 - [NodeUnstageVolume](https://github.com/container-storage-interface/spec/blob/master/spec.md#nodeunstagevolume)
 - [NodeUnpublishVolume](https://github.com/container-storage-interface/spec/blob/master/spec.md#nodeunpublishvolume)
 
-This container is responsible for bind-mounting and umounting volumes on the responding nodes. Monitoring volumes is a WIP and will be added soon. Please refer [csi spec](https://github.com/container-storage-interface/spec) for more details on the CSI volume lifecycle.
+This container is responsible for bind-mounting and umounting volumes on the responding nodes. 
+Monitoring volumes is a WIP and will be added soon. 
+Please refer [csi spec](https://github.com/container-storage-interface/spec) for more details on the CSI volume lifecycle.
 
 Apart from this, there are also drive and volume controllers in place.
 
-#### Drive Controller
+### Drive Controller
 
-Drive controller manages the `directpvdrives` object lifecycle. This actively listens for drive object (post-hook) events like Add, Update and Delete. The drive controller is responsible for the following
+Drive controller manages the `directpvdrives` object lifecycle. 
+This actively listens for drive object (post-hook) events like `Add`, `Update` and `Delete`. 
+The drive controller is responsible for the following
 
 _Formatting a drive_ :-
 
@@ -107,7 +128,7 @@ Overall, drive controller validates and tries to sync the host state of the driv
 
 For more details on the drive states, please refer [Drive States](./drive-states.md).
 
-#### Volume Controller
+### Volume Controller
 
 Volume controller manages the `directpvvolumes` object lifecycle. This actively listens for volume object (post-hook) events like Add, Update and Delete. The volume controller is responsible for the following
 
@@ -116,7 +137,7 @@ _Releasing/Purging deleted volumes and free-ing up its space on the drive_ :-
 When a volume is deleted (PVC deletion) or purged (using `kubectl directpv drives purge` command), the corresponding volume object will be in terminating state (with deletion timestamp set on it). The volume controller will look for such deleted volume objects and releases them by freeing up the disk space and unsetting the finalizers.
 
 
-### Central Controller
+## Central Controller
 
 This runs as a deployment in `directpv` namespace with default replica count 3.
 
@@ -124,13 +145,13 @@ This runs as a deployment in `directpv` namespace with default replica count 3.
 
 Each pod consist of two continers
 
-#### CSI Provisioner
+### CSI Provisioner
 
 This is a kubernetes csi side-car container which is responsible for sending volume provisioning (CreateVolume) and volume deletion (DeleteVolume) requests to csi drivers.
 
 For more details, please refer [external-provisioner](https://github.com/kubernetes-csi/external-provisioner).
 
-#### DirectPV
+### DirectPV
 
 This container acts as a central controller and implements the following RPCs
 
