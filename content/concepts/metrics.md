@@ -6,21 +6,25 @@ draft: false
 tableOfContents: true
 ---
 
-Monitoring guidelines
-----------------------
+## Monitoring Guidelines
 
-DirectPV nodes export Prometheus compatible metrics data by exposing a metrics endpoint at /directpv/metrics. Users looking to monitor their tenants can point Prometheus configuration to scrape data from this endpoint.
+DirectPV nodes export Prometheus compatible metrics data by exposing a metrics endpoint at `/directpv/metrics`. 
+Users looking to monitor their tenants can point their Prometheus configuration to scrape data from this endpoint.
 
-DirectPV node server exports the following metrics
+## Supported Metrics
+
+DirectPV node server exports the following metrics:
 
 - directpv_stats_bytes_used
 - directpv_stats_bytes_total
 
-These metrics are categorized by labels ['tenant', 'volumeID', 'node']. These metrics will be representing the volume stats of the published volumes.
+These metrics are categorized by labels ['tenant', 'volumeID', 'node'] and represent the volume stats of the published volumes.
 
-Please apply the following Prometheus config to scrape the metrics exposed. 
+## Configuration
 
-```
+Apply the following Prometheus config to scrape the metrics exposed. 
+
+```yaml {.copy}
 global:
   scrape_interval: 15s
   external_labels:
@@ -72,16 +76,20 @@ scrape_configs:
     target_label: kubernetes_name
 ```
 
+## Filtering
+
+Prometheus supports filtering results with the [PromQL language](https://prometheus.io/docs/prometheus/latest/querying/basics/).
+
 For example, use the following promQL to query the volume stats.
 
-- To filter out the volumes scheduled in `node-3` node :-
+- To filter the volumes scheduled in `node-3`
 
-```
-directpv_stats_bytes_total{node="node-3"}
-```
+  ```promql
+  directpv_stats_bytes_total{node="node-3"}
+  ```
 
-- To filter out the volumes of tenant `tenant-1` scheduled in `node-5` node :-
+- To filter the volumes of `tenant-1` scheduled in `node-5`
 
-```
-directpv_stats_bytes_used{tenant="tenant-1", node="node-5"}
-```
+  ```promql
+  directpv_stats_bytes_used{tenant="tenant-1", node="node-5"}
+  ```

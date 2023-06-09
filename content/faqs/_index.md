@@ -9,37 +9,48 @@ heading: true
 
 ## What type of disks are recommended for DirectPV?
 
-DirectPV is specifically meant for [Direct Attached Storage](https://en.wikipedia.org/wiki/Direct-attached_storage) such as hard drives, solid-state drives and JBODs etc. 
+DirectPV is specifically meant for [Direct Attached Storage](https://en.wikipedia.org/wiki/Direct-attached_storage) such as hard drives and solid-state drives in a "JBOD" configuration (Just a Bunch of Disks). 
 
-Avoid using DirectPV with SAN and NAS based storage options, as they inherently involve extra network hops in the data path. This leads to poor performance and increased complexity.
+Avoid using DirectPV with SAN- and NAS-based storage options, as they inherently involve extra network hops in the data path. 
+This leads to poor performance and increased complexity.
 
-## How DirectPV is different from LocalPV and HostPath?
+## How is DirectPV is different from LocalPV and HostPath?
 
-Hostpath volumes are ephemeral and are tied to the lifecycle of pods. Hostpath volumes are lost when a pod is restarted or deleted, resulting in the loss of any stored data. 
+HostPath volumes are ephemeral and are tied to the lifecycle of pods. 
+Deleting or restarting a pod results in the removal of the HostPath volumes.
+This causes the loss of any data stored on the volumes. 
 
-DirectPV volumes are persistent through node and pod reboots. The lifecycle of a DirectPV volume is managed by the associated [Persistent Volume Claims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/).
+DirectPV volumes persist through both node and pod reboots. 
+The associated [Persistent Volume Claims](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) (PVC) manage the lifecycle of a DirectPV volume.
 
-LocalPVs are statically provisioned from a local storage resource on the nodes where persistent volumes are required, and must be created prior to the workloads using them. User management is required down to creating the actual object resource for the local PV.
+LocalPVs are statically provisioned from a local storage resource on the nodes that require persistent volumes.
+You must create the required LocalPVs prior to the workloads using them. 
+For LocalPV, you must provide extensive user management for all stages, including creating the actual object resource for LocalPV.
 
-DirectPV also creates statically provisioned volume resources, but does not require user intervention for the creation of the object resource. Instead, DirectPV dynamically provisions the persistent volume in response to a PVC requesting a DirectPV storage volume. This significantly reduces complexity of management.
+DirectPV also creates statically provisioned volume resources, but does not require user intervention for the creation of the object resource. 
+Instead, DirectPV dynamically provisions the persistent volume in response to a PVC requesting a DirectPV storage volume. 
+This significantly reduces complexity of management.
 
 ## How are the disks selected for a Pod?
 
-DirectPV operates only on those disks which it [explicitly manages](./cli.md#initialize-the-available-drives-present-in-the-cluster)
+DirectPV operates only on those disks which it [explicitly manages]({{< relref "command-line/cli.md#initialize-the-available-drives-present-in-the-cluster" >}}).
 
-	1. DirectPV selects managed disks local to the node where the pod is scheduled. This provides direct access for the pods to the disks. 
+For these managed disks, DirectPV:
 
-	2. DirectPV runs a selection algorithm to choose a disk for a volume creation request
+	1. Selects disks local to the node where the pod is scheduled, providing direct access for the pods to the disks. 
 
-	3. DirectPV then creates a sub-directory for the volume with quota set on the sub-directory for the requested volume size
+	2. Runs a selection algorithm to choose a disk for a volume creation request.
 
-	4. DirectPV publishes the volume to the pod.
+	3. Creates a sub-directory for the volume with quota set on the sub-directory for the requested volume size.
 
- To know more on the selection algorithm, please refer [here](./volume-scheduling.md).
+	4. Publishes the volume to the pod.
+
+ For more details on how DirectPV manages and selects disks, see [volume scheduling]({{< relref "volume-scheduling/_index.md" >}})
 
 ## What does drive initialization do?
 
-DirectPV command `kubectl directpv init` command will prepare the drives by formatting them with XFS filesystem and mounting them in a desired path (/var/lib/directpv/mnt/<uuid>). Upon success, these drives will be ready for volumes to be scheduled and you can see the initialized drives in `kubectl directpv list drives`.
+DirectPV command `kubectl directpv init` command will prepare the drives by formatting them with XFS filesystem and mounting them in a desired path (/var/lib/directpv/mnt/<uuid>). 
+Upon success, these drives will be ready for volumes to be scheduled and you can see the initialized drives in `kubectl directpv list drives`.
 
 ## What are the conditions that a drive must satisfy to be used for DirectPV?
 

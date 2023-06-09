@@ -58,7 +58,7 @@ tableOfContents: true
 | `name`       | `directpvinitrequests` |
 | `apigroup`   | `directpv.min.io`      |
 
-### Driver RBAC 
+### Driver Role Based Access Control (RBAC) 
 
 | apiGroup                  | Resources                   | Verbs                                                | 
 | --------------------------|-----------------------------|------------------------------------------------------|
@@ -82,4 +82,4 @@ tableOfContents: true
 | `storage.k8s.io`          | `volumeattachments`         | `get`, `list`, `watch`                               |
 
 
-The service account binded to the above clusterrole is `directpv-min-io` in `directpv` namespace and the corresponding clusterrolebinding is `directpv-min-io`
+The service account bound to the above `clusterrole` is `directpv-min-io` in the `directpv` namespace and the corresponding `clusterrolebinding` is `directpv-min-io`

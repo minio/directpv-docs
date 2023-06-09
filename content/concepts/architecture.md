@@ -31,7 +31,6 @@ These components run on two pods in the Kubernetes environment:
 2. **DirectPV Central Controller**
    Runs the CSI Controller as a [deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
 
-
 ## Scalability
 
 The Node Driver DaemonSet runs on each node, performing only operations specific to its node.
@@ -57,36 +56,36 @@ For information on security in DirectPV, see the [security page]({{< relref "con
 The Node Driver runs on every node in the `directpv` namespace as a [daemonset](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/). 
 Each pod consists of four containers for the CSI Driver, Driver Controller, Volume Controller, and Drive Discovery.
 
-### Node driver registrar
+### Node Driver Registrar
 
-TThe Node Driver Registrar works as a Kubernetes CSI sidecar container to register the `directpv` CSI driver with kubelet. 
-This registration is necessary for kubelet to issue CSI RPC calls like `NodeGetInfo`, `NodeStageVolume`, `NodePublishVolume` to the corresponding nodes.
+The Node Driver Registrar works as a Kubernetes CSI sidecar container to register the `directpv` CSI driver with [kubelet](https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet/). 
+This registration is necessary for kubelet to issue CSI Remote Procedure Calls (RPCs) like `NodeGetInfo`, `NodeStageVolume`, `NodePublishVolume` to the corresponding nodes.
 
-For more details, please refer [node-driver-registrar](https://github.com/kubernetes-csi/node-driver-registrar).
+For more details, please refer to [node driver registrar](https://github.com/kubernetes-csi/node-driver-registrar) in the Kubernetes repository.
 
 ### Livenessprobe
 
-This is a kubernetes csi side-car container which exposes an HTTP `/healthz` endpoint as a liveness hook. 
-This endpoint will be used by kubernetes for csi-driver liveness checks.
+This Kubernetes CSI sidecar container exposes an HTTP `/healthz` endpoint as a liveness hook. 
+Kubernetes uses this endpoint to perform CSI Driver liveness checks.
 
-For more details, see the [Kubernetes csi repository on livenessprobe](https://github.com/kubernetes-csi/livenessprobe)
+For more details, see the [Kubernetes CSI repository on livenessprobe](https://github.com/kubernetes-csi/livenessprobe)
 
-### Dynamic drive discovery
+### Dynamic Drive Discovery
 
-This container uses `directpv` binary with `--dynamic-drive-handler` flag enabled. 
-This container is responsible for discovering and managing the drives in the node.
+DirectPV utilizes the Dynamic Drive Discovery container to discover and manage drives in the node.
+Enable this container by using the `--dynamic-drive-handler` flag.
 
-The devices will be discovered from `/run/data/udev/` directory and dynamically listens for udev events for any add, change and remove uevents. 
-Apart from dynamically listening, there is a periodic 30sec sync which checks and syncs the drive states.
+The Dynamic Drive Discovery container monitors the `/run/data/udev/` directory and dynamically listens for [udev](https://en.wikipedia.org/wiki/Udev) events for any uevents that add, change or remove drives. 
+Apart from dynamically listening, the container also periodically checks and syncs the drive states.
 
-For any change, the directcsidrive object will be synced to match the local state. 
-A new directcsidrive object will be created when a new device is detected during sync or when an "Add" uevent occurs. 
-If an inuse/ready drive gets corrupted or lost, it will be tagged with a error condition on the drive. 
-If an Available/Unavailable drive is lost, it will be deleted.
+DirectPV creates a `directcsidrive` object when it detects a new device during sync or in response to an `Add` uevent. 
+For any change, the `directcsidrive` object syncs to match the local state. 
+A drive in either an `inuse` or `ready` state gets corrupted or lost, the `directcsidrive` object tags the drive with an error condition. 
+A drive with a state of `Available` or `Unavailable` becomes lost, the `directcsidrive` object deletes the drive.
 
 ### DirectPV
 
-This container acts as a node plugin and implements the following node service RPCs.
+This container acts as a node plugin and implements the following node service Remote Procedure Calls (RPCs).
 
 - [NodeGetInfo](https://github.com/container-storage-interface/spec/blob/master/spec.md#nodegetinfo)
 - [NodeGetCapabilities](https://github.com/container-storage-interface/spec/blob/master/spec.md#nodegetinfoNodeGetCapabilities)
@@ -96,68 +95,90 @@ This container acts as a node plugin and implements the following node service R
 - [NodeUnstageVolume](https://github.com/container-storage-interface/spec/blob/master/spec.md#nodeunstagevolume)
 - [NodeUnpublishVolume](https://github.com/container-storage-interface/spec/blob/master/spec.md#nodeunpublishvolume)
 
-This container is responsible for bind-mounting and umounting volumes on the responding nodes. 
-Monitoring volumes is a WIP and will be added soon. 
-Please refer [csi spec](https://github.com/container-storage-interface/spec) for more details on the CSI volume lifecycle.
+This container performs bind-mounting and unmounting of volumes on the responding nodes. 
+For details on the lifecycle of a volume, refer to the [CSI spec](https://github.com/container-storage-interface/spec/blob/master/spec.md#volume-lifecycle).
 
-Apart from this, there are also drive and volume controllers in place.
+The DirectPV container also provides drive and volume controllers, as detailed below.
+
+{{< admonition title="Volume Monitoring" type="note" >}}
+For information on monitoring DirectPV volumes, see [metrics]({{< relref "concepts/metrics.md" >}}).
+{{< /admonition >}}
 
 ### Drive Controller
 
-Drive controller manages the `directpvdrives` object lifecycle. 
-This actively listens for drive object (post-hook) events like `Add`, `Update` and `Delete`. 
-The drive controller is responsible for the following
+The Drive Controller manages the `directpvdrives` object lifecycle by actively listening for drive object (post-hook) events like `Add`, `Update` and `Delete`.
 
-_Formatting a drive_ :-
+The Drive Controller performs the following actions:
 
-If `.Spec.RequestedFormat` is set on the drive object, it indicates the `kubectl directpv drives format` was called on it and this drive will be formatted.
+- Formatting a drive
 
-_Releasing a drive_ :-
+  When the drive object has `.Spec.RequestedFormat` set, the drive controller formats the drive.
+  To set `.Spec.RequestedFormat`, run `kubectl directpv drives format`.
 
-`kubectl directpv drives release` is a special command to release a "Ready" drive in directpv cluster by umounting the drives and making it "Available". If `.Status.DriveStatus` is set to "Released", it indicates that `kubectl directpv drives release` was called on the drive and it will be released.
+- Releasing a drive
 
-_Checking the primary mount of the drive_ :-
+  The Drive Controller releases an `Ready` drive when the `.Status.DriveStatus` indicates `Released`.
+  This action changes the status of the drive from `Ready` to `Available`.
 
-Drive controller also checks for the primary drive mounts. If an "InUse" or "Ready" drive is not mounted or if it has unexpected mount options set, the drive will be remounted with correct mountpoint and mount options.
+  To set `.Status.DriveStatus` to `Released`, run `kubectl directpv drives release` on a drive in `Ready` status.
 
-_Tagging the lost drives_ :-
+- Checking the primary mount of the drive
 
-If a drive is not found on the host, it will be tagged as "lost" with an error message attached to the drive object and its respective volume objects.
+  Drive controller also checks for the primary drive mounts. 
+  The Drive Controller remounts drives with correct mount points and mount options in the following situations:
 
-Overall, drive controller validates and tries to sync the host state of the drive to match the expected state of the drive. For example, it mounts the "Ready" and "InUse" drives if their primary mount is not present in host.
+  - An `InUse` or `Ready` drive is not mounted
+  - If an `InUse` or `Ready` drive has unexpected mount options
+  
+- Tagging the lost drives
 
-For more details on the drive states, please refer [Drive States](./drive-states.md).
+  When the Drive Controller cannot locate a drive on the host, the Drive Controller tags the drive as `lost` with an error message attached to the drive object and its respective volume objects.
+
+Overall, the Drive Controller validates and tries to sync the host state of the drive to match the expected state of the drive. 
+For example, it mounts the `Ready` and `InUse` drives if their primary mount is not present in the host.
 
 ### Volume Controller
 
-Volume controller manages the `directpvvolumes` object lifecycle. This actively listens for volume object (post-hook) events like Add, Update and Delete. The volume controller is responsible for the following
+The Volume Controller manages the `directpvvolumes` object lifecycle by actively listening for volume object (post-hook) events like `Add`, `Update` and `Delete`. 
 
-_Releasing/Purging deleted volumes and free-ing up its space on the drive_ :-
+The volume controller is responsible for the following:
 
-When a volume is deleted (PVC deletion) or purged (using `kubectl directpv drives purge` command), the corresponding volume object will be in terminating state (with deletion timestamp set on it). The volume controller will look for such deleted volume objects and releases them by freeing up the disk space and unsetting the finalizers.
+- Releasing/Purging deleted volumes and free-ing up its space on the drive
 
+  When an action deletes or purges a volume (PVC deletion or using the `kubectl directpv drives purge` command), the corresponding volume object changes to a terminating state with a deletion timestamp set on it. 
+  The volume controller looks for deleted volume objects and releases them by freeing up the disk space and unsetting the finalizers.
 
 ## Central Controller
 
-This runs as a deployment in `directpv` namespace with default replica count 3.
+The Central Controller runs as a deployment in the `directpv` namespace with a default replica count or `3`.
 
-(Note: The central controller does not do any device level interactions in the host)
+{{< admonition type="note" >}}
+The Central Controller does not do any device level interactions in the host.
+{{< /admonition >}}
 
-Each pod consist of two continers
+
+Each pod consist of two containers.
+
+1. CSI Provisioner
+2. DirectPV
 
 ### CSI Provisioner
 
-This is a kubernetes csi side-car container which is responsible for sending volume provisioning (CreateVolume) and volume deletion (DeleteVolume) requests to csi drivers.
+The CSI Provisioner is a Kubernetes CSI sidecar container responsible for sending volume provisioning (`CreateVolume`) and volume deletion (`DeleteVolume`) requests to CSI drivers.
 
-For more details, please refer [external-provisioner](https://github.com/kubernetes-csi/external-provisioner).
+For more details, please refer to the Kubernetes CSI documentation on [external provisioner](https://github.com/kubernetes-csi/external-provisioner).
 
 ### DirectPV
 
-This container acts as a central controller and implements the following RPCs
+The DirectPV container acts as a central controller and implements the following RPCs
 
 - [CreateVolume](https://github.com/container-storage-interface/spec/blob/master/spec.md#createvolume)
 - [DeleteVolume](https://github.com/container-storage-interface/spec/blob/master/spec.md#deletevolume)
 
-This container is responsible for selecting a suitable drive for a volume scheduling request. The selection algorithm looks for range and topology specifications provided in the CreateVolume request and selects a drive based on its free capacity.
+The DirectPV container selects a suitable drive for a volume scheduling request. 
+The [selection algorithm]({{< relref "volume-scheduling/_index.md#drive-selection" >}}) looks for range and topology specifications provided in the `CreateVolume` request and selects a drive based on its free capacity.
 
-(Note: kube-scheduler is responsible for selecting a node for a pod, central controller will just select a suitable drive in the requested node based on the specifications provided in the create volume request)
+{{< admonition title="Admonition title" type="[note | tip | caution | warning | important]" >}}
+The `kube-scheduler` maintains responsibility for selecting a node for a pod.
+The Central Controller only selects a suitable drive in the requested node based on the specifications provided in the `CreateVolume` request.
+{{< /admonition >}}
