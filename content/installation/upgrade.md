@@ -6,40 +6,207 @@ draft: false
 tableOfContents: true
 ---
 
-Version Upgrade
----------------
+{{< admonition title="Updating Custom Installations" type="important" >}}
+Custom installations do not support client-side upgrade functionality. 
+Use `kubectl directpv migrate` to migrate the old resources to a new installation.
+{{< /admonition >}}
 
-### Guidelines to upgrade to the latest DirectPV version
+## Guidelines to upgrade to the latest DirectPV version
 
-DirectPV version upgrades are seameless and transparent. The resources will be upgraded automatically when you run the latest version over the existing resources. The latest version of DirectPV should be available in [krew](https://github.com/kubernetes-sigs/krew-index). For more details on the installation, Please refer the [Installation guidelines](./installation.md).
+DirectPV version upgrades are seamless and transparent. 
+The resources will be upgraded automatically when you run the latest version over the existing resources. 
+The latest version of DirectPV should be available in [krew](https://github.com/kubernetes-sigs/krew-index). 
+For more details on the installation, refer to the [installation guide]({{< relref "/installation/_index.md" >}}).
 
-NOTE: For the users who don't prefer krew, Please find the latest images in [releases](https://github.com/minio/directpv/releases).
+If you prefer to not use `krew`, find the latest images in [DirectPV releases on GitHub](https://github.com/minio/directpv/releases).
 
+For older versions, upgrade to v3.2.2 before upgrading to the latest version.
 
-#### Upgrade from versions < v3.2.x
+## Upgrade from v3.2.2 or later to latest
 
-If you are on DirectPV version < 3.2.x, it is recommended to upgrade to v3.2.2 and then to the latest
+In the latest version of DirectPV, the CSI sidecar images have been updated. 
 
-Please follow https://github.com/minio/directpv/blob/master_old/docs/upgrade.md#upgrade-to-v300 for the upgrade steps from legacy versions
+1. Uninstall the existing setup.
 
+   Uninstalling DirectPV does not remove any resources.
 
-#### Upgrade from v3.2.x
+   ```sh {.copy}
+   kubectl direct-csi uninstall
+   ```
 
-In the latest version of DirectPV, the CSI sidecar images have been updated. If private registry is used for images, please make sure the following images are available in your registry before upgrade.
+2. Confirm the deletion of the CSI pods 
 
+   ```sh {.copy}
+   kubectl get pods -n direct-csi-min-io
+   ```
+  
+   DirectPV v4.0.0 and later do not use the `direct-cs-min-io` namespace when creating new drives or volumes.
+   However, the latest versions of DirectPV can continue to use resources already existing in that namespace.
+
+3. Upgrade the `krew` plugin to the latest version
+   
+   ```sh {.copy}
+   kubectl krew upgrade directpv
+   ```
+
+   If you have not upgraded from Direct CSI to DirectPV, use the following instead:
+
+   ```sh {.copy}
+   kubectl krew install directpv
+   ```
+
+   If you prefer to not use `krew` or you use a private registry, push the following images:
+
+   ```text {.copy}
+   quay.io/minio/csi-node-driver-registrar:v2.6.3
+   quay.io/minio/csi-provisioner:v3.4.0
+   quay.io/minio/livenessprobe:v2.9.0
+   quay.io/minio/csi-resizer:v1.7.0
+   ```
+  
+   If your kubernetes version is less than v1.20, also push `quay.io/minio/csi-provisioner:v2.2.0-go1.18`
+
+4. _(Optional)_ If you are using custom storage classes for scheduling **and** you are upgrading from a version < v4.0.0, you **must** modify the storage class parameters.
+
+   Change `direct.csi.min.io/access-tier: <your_access_tier_value>` to `directpv.min.io/access-tier: <your_access_tier_value>` in the respective storage class parameters section.
+
+5. Install the updated version of Direct-CSI
+   
+   ```sh {.copy}
+   kubectl directpv install
+   ```
+
+6. Check that pods are running
+   
+   ```sh {.copy}
+   kubectl get pods -n direct-csi-min-io -w
+   ```
+
+7. Verify you can reach DirectPV drives
+   
+   ```sh {.copy}
+   kubectl directpv drives ls
+   ```
+
+### Cleaning Up Post-Upgrade
+
+The older CRDs (`directcsidrives` and `directcsivolumes`) are deprecated and not used in versions > v4.0.0.
+These can be removed after upgrading. 
+
+Use the following Bash script to remove the older objects after upgrading to latest.
+
+```bash {.copy}
+#!/usr/bin/env bash
+#
+# This file is part of MinIO DirectPV
+# Copyright (c) 2023 MinIO, Inc.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#
+# This script removes direct-csi drives and volumes after taking backup YAMLs
+# to directcsidrives.yaml and directcsivolumes.yaml
+#
+
+set -e -C -o pipefail
+
+function init() {
+    if [[ $# -ne 0 ]]; then
+        echo "usage: remove-directcsi.sh"
+        echo
+        echo "This script removes direct-csi drives and volumes after taking backup YAMLs"
+        echo "to directcsidrives.yaml and directcsivolumes.yaml"
+        exit 255
+    fi
+
+    if ! which kubectl >/dev/null 2>&1; then
+        echo "kubectl not found; please install"
+        exit 255
+    fi
+}
+
+# usage: unset_object_finalizers <resource>
+function unset_object_finalizers() {
+    kubectl get "${1}" -o custom-columns=NAME:.metadata.name --no-headers | while read -r resource_name; do
+        kubectl patch "${1}" "${resource_name}" -p '{"metadata":{"finalizers":null}}' --type=merge
+    done
+}
+
+function main() {
+    kubectl get directcsivolumes -o yaml > directcsivolumes.yaml
+    kubectl get directcsidrives -o yaml > directcsidrives.yaml
+
+    # unset the finalizers
+    unset_object_finalizers "directcsidrives"
+    unset_object_finalizers "directcsivolumes"
+    
+    # delete the resources
+    kubectl delete directcsivolumes --all
+    kubectl delete directcsidrives --all
+}
+
+init "$@"
+main "$@"
 ```
-quay.io/minio/csi-node-driver-registrar:v2.6.3
-quay.io/minio/csi-provisioner:v3.4.0
-quay.io/minio/livenessprobe:v2.9.0
-quay.io/minio/csi-resizer:v1.7.0
-```
 
-**Notes:**
+## Upgrade from versions < v3.2.x
 
-- If your kubernetes version is less than v1.20, you need push `quay.io/minio/csi-provisioner:v2.2.0-go1.18`
+If you are on DirectCSI version < 3.2.2, upgrade to v3.2.2, then to the latest
 
-- If you are on DirectPV versions < v4.0.0 and if you are using any custom storage classes for controlling volume scheduling based on access-tiers as explained [here](https://github.com/minio/directpv/blob/master_old/docs/scheduling.md), you need to make the following change to these custom storage classes.
+1. Uninstall the existing setup.
 
-You need to change `direct.csi.min.io/access-tier: <your_access_tier_value>` to `directpv.min.io/access-tier: <your_access_tier_value>` in the respective storage class parameters section.
+   Uninstalling DirectPV does not remove any resources.
 
-- The older CRDs (directcsidrives and directcsivolumes) are deprecated and not used in versions > v4.0.0, it can be removed after upgrading. Please use the [bash script](./tools/remove-directcsi.sh) to remove the older objects after upgrading to latest.
+   ```sh {.copy}
+   kubectl direct-csi uninstall
+   ```
+
+2. Confirm the deletion of the CSI pods 
+
+   ```sh {.copy}
+   kubectl get pods -n direct-csi-min-io
+   ```
+  
+   DirectPV v4.0.0 and later do not use the `direct-cs-min-io` namespace when creating new drives or volumes.
+   However, the latest versions of DirectPV can continue to use resources already existing in that namespace.
+
+3. Download Direct-CSI v3.2.2 from https://github.com/minio/directpv/releases/tag/v3.2.2
+
+4. Load the following images:
+
+   ```text {.copy}
+   quay.io/minio/csi-provisioner:v2.2.0-go1.18
+   quay.io/minio/csi-node-driver-registrar:v2.2.0-go1.18
+   quay.io/minio/livenessprobe:v2.2.0-go1.18
+   ```
+  
+   If your kubernetes version is less than v1.20, also push `quay.io/minio/csi-provisioner:v2.2.0-go1.18`
+
+5. Install the updated version of Direct-CSI
+   
+   ```sh {.copy}
+   kubectl direct-csi install
+   ```
+
+6. Check that pods are running
+   
+   ```sh {.copy}
+   kubectl get pods -n direct-csi-min-io -w
+   ```
+
+7. Verify you can reach DirectPV drives
+   
+   ```sh {.copy}
+   kubectl direct-csi drives ls
+   ```

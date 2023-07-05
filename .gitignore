@@ -1,0 +1,9 @@
+.hugo_build.lock
+.linkcheckignore
+*.tar.gz
+resources
+public
+.vscode
+node_modules
+**/.DS_Store
+package-lock.json

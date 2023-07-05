@@ -49,7 +49,7 @@ To restore operations, bring the Central Controller to running status.
 
 ## Security
 
-For information on security in DirectPV, see the [security page]({{< relref "concepts/security.md" >}})
+For information on security in DirectPV, see the [security policy on GitHub](https://github.com/minio/directpv/security/policy).
 
 ## Node Driver
 

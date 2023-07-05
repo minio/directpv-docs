@@ -5,90 +5,106 @@ lastmod: :git
 draft: false
 tableOfContents: true
 heading: true
+weight: 10
 ---
 
-Installation
--------------
+## Prerequisites
 
-### Prerequisites
+| Name                                                            | Version  |
+| ----------------------------------------------------------------|----------|
+| kubernetes                                                      | v1.19+   |
+| [kubectl](https://kubernetes.io/docs/tasks/tools/)              | v1.19+   |
+| [krew](https://krew.sigs.k8s.io/docs/user-guide/setup/install/) | v0.4.3+  |
 
-| Name         | Version  |
-| -------------|----------|
-| kubectl      | v1.19+   |
-| kubernetes   | v1.19+   |
+## Production Readiness Checklist
 
+Make sure the following check-boxes are ticked before production deployment
 
-### Plugin Installation
+ - [ ] If using a private registry, make all the images listed in [air-gapped installation images](#air-gapped-installation-private-registry) available in the private registry.
+ - [ ] If using seccomp on the system, load the DirectPV [seccomp policy](https://raw.githubusercontent.com/minio/directpv/master/seccomp.json) on all nodes. 
+ 
+   For more detailed instructions on seccomp, refer to the [Kubernetes documentation](https://kubernetes.io/docs/tutorials/clusters/seccomp/)
+ - [ ] If using AppArmor on the system, load the DirectPV [apparmor profile](https://raw.githubusercontent.com/minio/directpv/master/apparmor.profile) on all nodes. 
+      
+   For more detailed instructions on AppArmor in Kubernetes environment, refer to the [Kubernetes documentation](https://kubernetes.io/docs/tutorials/clusters/apparmor/).
 
-DirectPV plugin can be installed from kubectl krew index using:
+## Plugin Installation
 
-```sh
-kubectl krew install directpv
-```
+1. Install DirectPV to your krew installation directory (default: `$HOME/.krew`):
 
-After running this installation:
+   ```sh {.copy}
+   kubectl krew install directpv
+   ```
 
- - The `directpv` plugin will be installed in your krew installation directory (default: `$HOME/.krew`) 
- - Run `kubectl directpv --version` to verify that the installation worked
- - If the error `Error: unknown command "directpv" for "kubectl"` is shown, try adding `$HOME/.krew/bin` to your `$PATH`
+2. Run `kubectl directpv --version` to verify DirectPV installed correctly
+ 
+   If you receive the error  `Error: unknown command "directpv" for "kubectl"`, add `$HOME/.krew/bin` to your `$PATH`.
 
-### Driver Installation
+## Driver Installation
 
-For installation in production grade environments, ensure that all criteria in the [Production Readiness Checklist](#production-readiness-checklist) are satisfied.
+{{< admonition type="note" >}}
+For installation in production grade environments, ensure you satisfy all criteria in the [Production Readiness Checklist](#production-readiness-checklist).
+{{< /admonition >}}
 
-(NOTE: Please refer the [CLI Guide](./cli.md) for more helpers on the following commands.)
+The installation process creates a new storage class named `directpv-min-io`.
+You can provision DirectPV volumes by using this storage class as the `storageClassName` in `PodSpec.VolumeClaimTemplates`.
 
-#### 1. Install the driver
+For an example of using `directpv-min-io`, see the [MinIO example on GitHub](https://github.com/minio/directpv/blob/master/functests/minio.yaml#L62).
 
-```sh
+<!-- - view the [usage guide](./usage-guide.md) -->
+
+Refer to the [CLI Guide]({{< relref "command-line/_index.md" >}}) for more helpers on the following commands.
+
+### Install the driver
+
+Install the `directpv-min-io` CSI driver in the kubernetes cluster.
+
+```sh {.copy}
 kubectl directpv install
 ```
 
-This will install `directpv-min-io` CSI driver in the kubernetes cluster.
 
-**Notes:**
+- DirectPV components install in the namespace `directpv`.
+- Specify an alternate kubeconfig with `kubectl directpv --kubeconfig /path/to/kubeconfig`.
+- The DirectPV driver requires the Role Based Access Control (RBAC) listed in the [specification document]({{< relref "concepts/specification.md#driver-rbac" >}})
+- The DirectPV driver runs in `privileged` mode, required to mount, unmount, and format drives.
+- The deamonset used by DirectPV requires the following open ports:
+  - `10443` for metrics 
+  - Port `30443` for readiness handlers
 
- - DirectPV components are installed in the namespace `directpv`
- - alternate kubeconfig path can be specified using `kubectl directpv --kubeconfig /path/to/kubeconfig` 
- - the rbac requirements for the driver is [here](./specification.md#driver-rbac)
- - the driver runs in `privileged` mode, which is required for mounting, unmounting and formatting drives
- - The deamonset used by directpv will be using the ports `10443` for metrics and `30443` for readiness handlers. Make sure these ports are open on the nodes.
+### List discovered drives
 
-#### 2. List discovered drives
+List all available drives in the kubernetes cluster.
+DirectPV generates an `init` config file (default: `drives.yaml`) you can use to initialize these drives.
 
-```sh
+```sh {.copy}
 kubectl directpv discover
 ```
 
-This will list all available drives in the kubernetes cluster and will generate an init config file (default: drives.yaml) to initialize these drives.
+Check the contents of the file and modify the file as needed to remove any drives that DirectPV should not control.
 
-#### 3. Intitialize the drives
+### Initialize the drives
 
-```sh
+```sh {.copy}
 kubectl directpv init drives.yaml
 ```
 
-This will initialize selected drives in drives.yaml
+Initialize the drives selected in `drives.yaml`
 
-**Notes:**
 
- - initialization will erase all data on the drives. Double check to make sure that only intended drives are specified 
+{{< admonition title="Potential Data Loss" type="warning" >}}
+Initialization erases all existing data on the drives. 
+Verify that only intended drives are specified in the file passed to the init command.
+{{< /admonition >}}
 
-#### 4. Verify installation
+### Verify installation
 
-```sh
+After initializing the drives, show information about the drives formatted and added to DirectPV.
+
+```sh {.copy}
 kubectl directpv info
 ```
 
-This will show information about the drives formatted and added to DirectPV.
-
-After running this installation:
-
- - storage class named `directpv-min-io` is created
- - `directpv-min-io` can be specified as the `storageClassName` in in `PodSpec.VolumeClaimTemplates` to provision DirectPV volumes
- - example statefulset using `directpv-min-io` can be found [here](../minio.yaml#L61) 
- - optional: view the [driver specification](./specification.md)
-<!-- - view the [usage guide](./usage-guide.md) -->
 
 ## Air-gapped Installation (Private Registry)
 
@@ -98,14 +114,15 @@ Push the following images to your private registry
  - quay.io/minio/csi-provisioner:v3.4.0
  - quay.io/minio/livenessprobe:v2.9.0
  - quay.io/minio/csi-resizer:v1.7.0
- - quay.io/minio/directpv:${latest_tag_name}
+ - quay.io/minio/directpv:latest
  
  **Notes:**
 
- - If your kubernetes version is less than v1.20, you need push `quay.io/minio/csi-provisioner:v2.2.0-go1.18`
+ - If you use a Kubernetes version earlier than v1.20, you need to push `quay.io/minio/csi-provisioner:v2.2.0-go1.18`
 
-Here is a shell script to Copy-Paste into your terminal to do the above steps:
-```sh
+Use the following shell script to do the above steps:
+
+```sh {.copy}
 /bin/bash -e
 
 # set this to private registry URL (the URL should NOT include http or https)
@@ -124,32 +141,32 @@ for image in ${images[*]}; do pull_tag_push $image $(privatize $image); done
 
 ## Custom Installation
 
-If any other customization is desired,
+To perform additional customizations, generate an install yaml file, customize it, then use the file to install DirectPV.
 
-Step 1: Generate the specification for installing DirectPV
-```sh
-$ kubectl directpv install -o yaml > directpv-install.yaml
-```
+1. Generate the specification for installing DirectPV.
 
-Step 2: Make appropriate changes to the resources
-```
-$ emacs directpv-install.yaml
-```
+   ```sh {.copy}
+   kubectl directpv install -o yaml > directpv-install.yaml
+   ```
 
-Step 3: Install DirectPV
-```
-$ kubectl create -f directpv-install.yaml
-```
+2. Open the generated file in a text editor and make changes.
+   This command uses the CLI editor `nano`.
+  
+   ```sh {.copy}
+   nano directpv-install.yaml
+   ```
 
-**Notes:**
+   Replace `nano` with your preferred text editor.
 
-- Client-side upgrade functionality will not be available for custom installations. You need to execute `kubectl directpv migrate` to migrate the old resources.
+3. Install a customized DirectPV
 
-## Production Readiness Checklist
+   ```sh {.copy}
+   kubectl create -f directpv-install.yaml
+   ```
 
-Make sure the following check-boxes are ticked before production deployment
+{{< admonition title="Updating Custom Installations" type="important" >}}
+Custom installations do not support client-side upgrade functionality. 
+Use `kubectl directpv migrate` to migrate the old resources to a new installation.
+{{< /admonition >}}
 
- - [ ] If using a private registry, all the images listed in [air-gapped installation](#air-gapped-installation-private-registry) should be available in the private registry
- - [ ] If seccomp is enabled in the system, DirectPV [seccomp policy](../seccomp.json) should be loaded on all nodes. Instructions available [here](https://kubernetes.io/docs/tutorials/clusters/seccomp/)
- - [ ] If apparmor is enabled in the system, DirectPV [apparmor profile](../apparmor.profile) should be loaded on all nodes. Instructions available [here](https://kubernetes.io/docs/tutorials/clusters/apparmor/)
- - [ ] Review and Sign-off the [Security Checklist](../security-checklist.md) for providing elevated privileges to DirectPV.
+

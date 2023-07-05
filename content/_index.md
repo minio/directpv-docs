@@ -30,6 +30,12 @@ Such additional layers of disaggregation result in increased complexity and poor
  - [Install DirectPV]({{< relref "/content/installation/_index.md" >}})
  - [Upgrade DirectPV]({{< relref "/content/installation/upgrade.md" >}})
 
+## Concepts
+
+- [Architecture]({{< relref "/content/concepts/architecture.md" >}})
+- [Metrics and Monitoring]({{< relref "/content/concepts/metrics.md" >}})
+- [DirectPV Specification]({{< relref "/content/concepts/specification.md" >}}) 
+
 ## Managing drives
 
 - [Replace Drives]({{< relref "/content/manage-drives/drive-replacement.md" >}})
@@ -41,21 +47,14 @@ Such additional layers of disaggregation result in increased complexity and poor
 - [Scheduling Overview]({{< relref "/content/volume-scheduling/_index.md" >}})
 - [Schedule PVCs]({{< relref "/content/volume-scheduling/scheduling.md" >}})
 
-## Command Line Interface (CLI)
-
- - [CLI reference]({{< relref "content/command-line/cli.md" >}})
-
-## Concepts
-
-- [Architecture]({{< relref "/content/concepts/architecture.md" >}})
-- [Metrics and Monitoring]({{< relref "/content/concepts/metrics.md" >}})
-- [Security]({{< relref "/content/concepts/security.md" >}})
-- [DirectPV Specification]({{< relref "/content/concepts/specification.md" >}}) 
-
 ## Frequently Asked Questions
 
 - [Frequently Asked Questions]({{< relref "/content/faqs/_index.md" >}})
 - [Troubleshooting]({{< relref "/content/faqs/troubleshooting.md" >}})
+
+## Command Line Interface (CLI)
+
+ - [CLI reference]({{< relref "content/command-line/_index.md" >}})
 
 <!--- 
  - [Usage Guide](./usage-guide.md)
