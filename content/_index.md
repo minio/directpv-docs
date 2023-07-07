@@ -8,6 +8,11 @@ tableOfContents: true
 
 This set of pages describes DirectPV, a Container Storage Interface (CSI) for direct attached storage made by MinIO.
 
+DirectPV consists of two primary components:
+
+1. The **DirectPV CSI Driver** installed directly to the Kubernetes cluster that provisions local volumes
+2. The **DirectPV Plugin** installed on the local machine to manage the DirectPV CSI Driver through the command line interface
+
 At the basic level, DirectPV is a distributed persistent volume manager.
 DirectPV is not a storage system like a SAN (Storage Area Network) or a NAS (Network Attached Storage). 
 Instead, you use DirectPV to discover, format, mount, schedule and monitor drives across servers in a distributed environment.
