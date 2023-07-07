@@ -11,6 +11,11 @@ tableOfContents: true
 Use this command to discover the block devices present in the cluster.
 The command outputs a yaml file listing the available drives.
 
+After generating the yaml, modify the file to select the drive(s) you wish to use with DirectPV.
+Ensure that any drives that should not be erased by DirectPV have **not** been selected in the yaml file.
+
+After discovering the drives, use the [`kubectl directpv init`]({{< relref "/command-line/init.md" >}}) command to initialize the drives for use with DirectPV.
+
 ## Syntax
 
 ```sh

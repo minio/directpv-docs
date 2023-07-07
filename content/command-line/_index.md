@@ -68,3 +68,19 @@ The available commands include:
 | [`remove`](remove.md)         | Remove unused drives from DirectPV                                |
 | *Uninstall DirectPV*          |                                                                   |
 | [`uninstall`](uninstall.md)   | Uninstall DirectPV in Kubernetes                                  |
+
+## Command History
+
+### DirectPV Command changes
+
+| Old DirectPV Command        | Replacement DirectPV Command       |
+|:----------------------------|:-----------------------------------|
+| `kubectl directpv discover` | [`kubectl directpv init`](init.md) |
+
+### Command changes from DirectCSI
+
+| DirectCSI Command                | DirectPV Command                                          |
+|:---------------------------------|:----------------------------------------------------------|
+| `kubectl directcsi drives list`  | `kubectl directpv list drives`                            |
+| `kubectl directcsi volumes list` | `kubectl directpv list volumes`                           |
+| `kubectl directcsi format`       | `kubectl directpv discover`, then `kubectl directpv init` |

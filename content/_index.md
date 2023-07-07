@@ -41,11 +41,10 @@ Such additional layers of disaggregation result in increased complexity and poor
 - [Metrics and Monitoring]({{< relref "/content/concepts/metrics.md" >}})
 - [DirectPV Specification]({{< relref "/content/concepts/specification.md" >}}) 
 
-## Managing drives
+## Managing drives and nodes
 
-- [Replace Drives]({{< relref "/content/manage-drives/drive-replacement.md" >}})
-- [Remove Nodes]({{< relref "/content/manage-drives/drain-node.md" >}})
-- [Expand Volumes]({{< relref "/content/manage-drives/volume-expansion.md" >}})
+- [Manage Drives and Nodes]({{< relref "/content/manage-drives/_index.md" >}})
+- [Scripts]({{< relref "/content/manage-drives/scripts.md" >}})
  
 ## Volume Scheduling
 

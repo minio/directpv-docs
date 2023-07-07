@@ -31,9 +31,10 @@ kubectl directpv init drives.yaml [flags]
 
 ### Flags
 
-| **Flag**                  | **Description**                                        |
-|---------------------------|--------------------------------------------------------|
-| `--timeout` \<duration\>  | Timeout for the initialization process (default 2m0s)  |
+| **Flag**                  | **Description**                                                         |
+|---------------------------|-------------------------------------------------------------------------|
+| `--dangerous`             | Perform initialization of drives which permanently erases existing data |
+| `--timeout` \<duration\>  | Timeout for the initialization process (default 2m0s)                   |
 
 ### Global Flags
 

@@ -12,7 +12,7 @@ weight: 10
 
 | Name                                                            | Version  |
 | ----------------------------------------------------------------|----------|
-| kubernetes                                                      | v1.19+   |
+| Kubernetes                                                      | v1.19+   |
 | [kubectl](https://kubernetes.io/docs/tasks/tools/)              | v1.19+   |
 | [krew](https://krew.sigs.k8s.io/docs/user-guide/setup/install/) | v0.4.3+  |
 
@@ -30,22 +30,85 @@ Make sure the following check-boxes are ticked before production deployment
 
 ## Plugin Installation
 
-1. Install DirectPV to your krew installation directory (default: `$HOME/.krew`):
+Install the DirectPV plugin in your local environment to manage the DirectPV CSI Driver in your Kubernetes cluster.
+You can install using `krew` or as a binary.
+
+
+### Install DirectPV Plugin with `krew`
+
+The latest DirectPV plugin is available in the `Krew` repository.
+
+1. Update `Krew` to download the latest version of the plugin
+
+   ```sh {.copy}
+   kubectl krew update
+   ```
+
+2. Install DirectPV to your krew installation directory (default: `$HOME/.krew`):
 
    ```sh {.copy}
    kubectl krew install directpv
    ```
 
-2. Run `kubectl directpv --version` to verify DirectPV installed correctly
+3. Run `kubectl directpv --version` to verify DirectPV installed correctly
  
    If you receive the error  `Error: unknown command "directpv" for "kubectl"`, add `$HOME/.krew/bin` to your `$PATH`.
 
+### Install DirectPV Plugin as a binary
+
+The plugin binary name starts by `kubectl-directpv` and is available at https://github.com/minio/directpv/releases/latest. 
+Download the binary as per your operating system and architecture.
+You may need to move the file to a location available to your system path.
+
+Refer to the documentation for your operating system for instructions on how to make a binary file executable and how to run the file.
+Detailed instructions for every available operating system are out of scope for this documentation.
+
+Below is an example for `GNU/Linux` on `amd64` architecture:
+
+```sh {.copy}
+# Download DirectPV plugin.
+$ release=$(curl -sfL "https://api.github.com/repos/minio/directpv/releases/latest" | awk '/tag_name/ { print substr($2, 3, length($2)-4) }')
+$ curl -fLo kubectl-directpv https://github.com/minio/directpv/releases/download/v${release}/kubectl-directpv_${release}_linux_amd64
+# Make the binary executable.
+$ chmod a+x kubectl-directpv
+$ mv kubectl-directpv /usr/local/bin/kubectl-directpv
+```
+
 ## Driver Installation
+
+Install the DirectPV Driver to your Kubernetes deployment.
 
 {{< admonition type="note" >}}
 For installation in production grade environments, ensure you satisfy all criteria in the [Production Readiness Checklist](#production-readiness-checklist).
 {{< /admonition >}}
 
+### Prerequisites
+
+* Kubernetes >= v1.19 on GNU/Linux on amd64, arm64 or ppc64le.
+ 
+* If you use private registry, below images must be pushed into your registry. You could use [this helper script]({{< relref "manage-drives/scripts.md#push-images.sh" >}}) to do that.
+  - quay.io/minio/csi-node-driver-registrar:v2.6.3
+  - quay.io/minio/csi-provisioner:v3.4.0 _(for Kubernetes >= v1.20)_
+  - quay.io/minio/csi-provisioner:v2.2.0-go1.18 _(for kubernetes < v1.20)_
+  - quay.io/minio/livenessprobe:v2.9.0
+  - quay.io/minio/csi-resizer:v1.7.0
+  - quay.io/minio/directpv:latest
+
+* If `seccomp` is enabled, load [DirectPV seccomp profile](../seccomp.json) on nodes where you want to install DirectPV and use `--seccomp-profile` flag to [`kubectl directpv install`]({{< relref "command-line/install.md" >}}) command. 
+ 
+  For more information, refer Kubernetes documentation [here](https://kubernetes.io/docs/tutorials/clusters/seccomp/)
+
+* If `apparmor` is enabled, load [DirectPV apparmor profile]([../apparmor.profile](https://raw.githubusercontent.com/minio/directpv/master/apparmor.profile)) on nodes where you want to install DirectPV and use `--apparmor-profile` flag to `kubectl directpv install` command. 
+  
+  For more information, refer to the [Kubernetes documentation](https://kubernetes.io/docs/tutorials/clusters/apparmor/).
+
+* Enabled `ExpandCSIVolumes` [feature gate](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/) for [volume expansion](https://kubernetes-csi.github.io/docs/volume-expansion.html) feature.
+
+* Review the [driver specification documentation]({{< relref "concepts/specification.md" >}})
+
+* For Red Hat Openshift users, refer to the [Openshift specific documentation]({{< relref "installation/openshift.md" >}}) for configuration prior to install DirectPV.
+
+### Procedure
 The installation process creates a new storage class named `directpv-min-io`.
 You can provision DirectPV volumes by using this storage class as the `storageClassName` in `PodSpec.VolumeClaimTemplates`.
 

@@ -43,14 +43,14 @@ These aliases have the same results and use the same flags as `label drives`.
 
 You can use the following global DirectPV flags with `kubectl directpv list`:
 
-| **Flag**                    | **Description**                                                             |
-|-----------------------------|-----------------------------------------------------------------------------|
-| `-d`, `--drives` \<string\> | Filter output by drive names; supports ellipses pattern such as `sd{a...z}` |
-| `--kubeconfig` \<string\>   | Path to the kubeconfig file to use for CLI requests                         |
-| `-n`, `--nodes` \<string\>  | Filter output by nodes; supports ellipses pattern such as `node{1...10}`    |
-| `--no-headers`              | Don't print column headers                                                  |
-| `-o`, `--output` \<string\> | Output format. Valid options are `json`, `yaml`, `wide`                     |
-| `--quiet`                   | Suppress printing error messages                                            |
+| **Flag**                    | **Description**                                                              |
+|-----------------------------|------------------------------------------------------------------------------|
+| `--all`                     | Select all drives                                                            |
+| `-d`, `--drives` \<string\> | Filter output by drive names; supports ellipses pattern such as `sd{a...z}`  |
+| `--dry-run`                 | Run the command and generate the output without making changes to any drives |
+| `--kubeconfig` \<string\>   | Path to the kubeconfig file to use for CLI requests                          |
+| `-n`, `--nodes` \<string\>  | Filter output by nodes; supports ellipses pattern such as `node{1...10}`     |
+| `--quiet`                   | Suppress printing error messages                                             |
 
 ## Examples
 

@@ -29,6 +29,7 @@ kubectl directpv install [flags]
 | `--legacy`                        | Enable legacy mode (Used with '-o')                                    |
 | `--node-selector` \<string\>      | Select the storage nodes using labels (`KEY=VALUE,`..)                 |
 | `-o`, `--output` \<string\>       | Generate installation manifest. Specify the format as `yaml` or `json` |
+| `--openshift`                     | Use an OpenShift specific installation                                 |
 | `--org` \<string\>                | Organization name in the registry (default `minio`)                    |
 | `--registry` \<string\>           | Name of container registry (default "quay.io")                         |
 | `--seccomp-profile` \<string\>    | Path to Seccomp profile                                                |
