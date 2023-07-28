@@ -125,11 +125,13 @@ Drives are labeled to set custom tagging which can be used in volume provisionin
 
 ```sh
 # Set label 'tier' key to 'hot' value.
-$ kubectl directpv label drives tiet=hot
+$ kubectl directpv label drives tier=hot
 
 # Remove label 'tier'.
 $ kubectl directpv label drives tier-
 ```
+
+Once set, use labels to [schedule drives]({{< relref "volumes/scheduling.md" >}}).
 
 Refer to the [label drives command]({{< relref "command-line/label-drives.md" >}}) for more information.
 
@@ -138,7 +140,7 @@ Refer to the [label drives command]({{< relref "command-line/label-drives.md" >}
 Replace a faulty drive with a new drive on a same node. 
 In this process, all volumes in the faulty drive are moved to the new drive then faulty drive is removed from DirectPV. 
 Currently, DirectPV does not support moving data on the volume to the new drive. 
-Use the [replace.sh]({{< relref "manage-drives/scripts.md#replace.sh" >}}) script to perform drive replacement. 
+Use the [replace.sh]({{< relref "drives/scripts.md#replace.sh" >}}) script to perform drive replacement. 
 
 Below is an example:
 
@@ -156,55 +158,3 @@ $ kubectl directpv remove --drives=vdb --nodes=node1
 ```
 
 Refer to the [remove command]({{< relref "command-line/remove.md" >}}) for more information.
-
-
-DirectPV Concepts
-
-- [Expand a Volume](volume-expansion.md)
-
-## Nodes
-
-### Prerequisites
-* Working DirectPV plugin. 
- 
-  To install the plugin, refer to the [plugin installation guide]({{< relref "installation/_index.md#plugin-installation" >}}).
-
-* Working DirectPV CSI driver in Kubernetes. 
-  
-  To install the driver, refer to the [driver installation guide]({{< relref "installation/_index.md#driver-installation" >}}).
-
-### Add node
-
-After adding a node into DirectPV DaemonSet, run DirectPV plugin [`discover`]({{< relref "command-line/discover.md" >}}) command.
-
-```sh
-$ kubectl directpv discover
-```
-
-### List node
-Run the DirectPV plugin's [`info`]({{< relref "command-line/info.md" >}}) command to get list of nodes. 
-
-```sh
-$ kubectl directpv info
-┌──────────┬──────────┬───────────┬─────────┬────────┐
-│ NODE     │ CAPACITY │ ALLOCATED │ VOLUMES │ DRIVES │
-├──────────┼──────────┼───────────┼─────────┼────────┤
-│ • master │ 512 MiB  │ 32 MiB    │ 2       │ 1      │
-│ • node1  │ 512 MiB  │ 32 MiB    │ 2       │ 1      │
-└──────────┴──────────┴───────────┴─────────┴────────┘
-
-64 MiB/1.0 GiB used, 4 volumes, 2 drives
-
-```
-
-Refer to the [`info` command]({{< relref "command-line/info.md" >}}) for more information.
-
-### Delete node
-
-{{< admonition type="warning" >}}
-***CAUTION: THIS IS DANGEROUS OPERATION WHICH LEADS TO DATA LOSS***
-{{< /admonition >}}
-
-1. Before removing a node make sure no volumes or drives on the node are in use.
-2. Remove the node from DirectPV DaemonSet.
-3. Run the [remove-node.sh]({{< relref "manage-drives/scripts.md#remove-node.sh" >}}) script.

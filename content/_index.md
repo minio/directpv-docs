@@ -43,13 +43,17 @@ Such additional layers of disaggregation result in increased complexity and poor
 
 ## Managing drives and nodes
 
-- [Manage Drives and Nodes]({{< relref "/content/manage-drives/_index.md" >}})
-- [Scripts]({{< relref "/content/manage-drives/scripts.md" >}})
+- [Manage Drives and Nodes]({{< relref "/content/drives/_index.md" >}})
+- [Manage Nodes]({{< relref "/content/nodes/_index.md" >}})
+- [Scripts]({{< relref "/content/drives/scripts.md" >}})
  
 ## Volume Scheduling
 
-- [Scheduling Overview]({{< relref "/content/volume-scheduling/_index.md" >}})
-- [Schedule PVCs]({{< relref "/content/volume-scheduling/scheduling.md" >}})
+- [Volumes Overview]({{< relref "/content/volumes/_index.md" >}})
+- [Provisioning]({{< relref "/content/volumes/provisioning.md" >}})
+- [Scheduling by label]({{< relref "/content/volumes/schedule-by-label.md" >}})
+- [Scheduling Overview]({{< relref "/content/volumes/scheduling.md" >}})
+- [Volume Scripts]({{< relref "/content/volumes/scripts.md" >}})
 
 ## Frequently Asked Questions
 

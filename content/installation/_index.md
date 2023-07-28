@@ -56,8 +56,8 @@ The latest DirectPV plugin is available in the `Krew` repository.
 
 ### Install DirectPV Plugin as a binary
 
-The plugin binary name starts by `kubectl-directpv` and is available at https://github.com/minio/directpv/releases/latest. 
-Download the binary as per your operating system and architecture.
+The plugin binary name starts with `kubectl-directpv` and is available at https://github.com/minio/directpv/releases/latest. 
+Download the binary for your operating system and architecture.
 You may need to move the file to a location available to your system path.
 
 Refer to the documentation for your operating system for instructions on how to make a binary file executable and how to run the file.
@@ -84,29 +84,29 @@ For installation in production grade environments, ensure you satisfy all criter
 
 ### Prerequisites
 
-* Kubernetes >= v1.19 on GNU/Linux on amd64, arm64 or ppc64le.
+* Kubernetes >= v1.18 on GNU/Linux on amd64.
  
-* If you use private registry, below images must be pushed into your registry. You could use [this helper script]({{< relref "manage-drives/scripts.md#push-images.sh" >}}) to do that.
-  - quay.io/minio/csi-node-driver-registrar:v2.6.3
-  - quay.io/minio/csi-provisioner:v3.4.0 _(for Kubernetes >= v1.20)_
+* If you use private registry, below images must be pushed into your registry. You could use [this helper script]({{< relref "drives/scripts.md#push-images.sh" >}}) to do that.
+  - quay.io/minio/csi-node-driver-registrar:v2.8.0
+  - quay.io/minio/csi-provisioner:v3.5.0 _(for Kubernetes >= v1.20)_
   - quay.io/minio/csi-provisioner:v2.2.0-go1.18 _(for kubernetes < v1.20)_
-  - quay.io/minio/livenessprobe:v2.9.0
-  - quay.io/minio/csi-resizer:v1.7.0
+  - quay.io/minio/livenessprobe:v2.10.0
+  - quay.io/minio/csi-resizer:v1.8.0
   - quay.io/minio/directpv:latest
 
 * If `seccomp` is enabled, load [DirectPV seccomp profile](../seccomp.json) on nodes where you want to install DirectPV and use `--seccomp-profile` flag to [`kubectl directpv install`]({{< relref "command-line/install.md" >}}) command. 
  
-  For more information, refer Kubernetes documentation [here](https://kubernetes.io/docs/tutorials/clusters/seccomp/)
+  For more information, refer to the Kubernetes documentation on [seccomp](https://kubernetes.io/docs/tutorials/clusters/seccomp/)
 
 * If `apparmor` is enabled, load [DirectPV apparmor profile]([../apparmor.profile](https://raw.githubusercontent.com/minio/directpv/master/apparmor.profile)) on nodes where you want to install DirectPV and use `--apparmor-profile` flag to `kubectl directpv install` command. 
   
-  For more information, refer to the [Kubernetes documentation](https://kubernetes.io/docs/tutorials/clusters/apparmor/).
+  For more information, refer to the [Kubernetes documentation on apparmor](https://kubernetes.io/docs/tutorials/clusters/apparmor/).
 
 * Enabled `ExpandCSIVolumes` [feature gate](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/) for [volume expansion](https://kubernetes-csi.github.io/docs/volume-expansion.html) feature.
 
 * Review the [driver specification documentation]({{< relref "concepts/specification.md" >}})
 
-* For Red Hat Openshift users, refer to the [Openshift specific documentation]({{< relref "installation/openshift.md" >}}) for configuration prior to install DirectPV.
+* For Red Hat Openshift users, refer to the [Openshift specific documentation]({{< relref "installation/openshift.md" >}}) for configuration prior to installing DirectPV.
 
 ### Procedure
 The installation process creates a new storage class named `directpv-min-io`.
@@ -120,12 +120,11 @@ Refer to the [CLI Guide]({{< relref "command-line/_index.md" >}}) for more helpe
 
 ### Install the driver
 
-Install the `directpv-min-io` CSI driver in the kubernetes cluster.
+Install the `directpv-min-io` CSI driver on all nodes in the kubernetes cluster.
 
 ```sh {.copy}
 kubectl directpv install
 ```
-
 
 - DirectPV components install in the namespace `directpv`.
 - Specify an alternate kubeconfig with `kubectl directpv --kubeconfig /path/to/kubeconfig`.
@@ -134,6 +133,10 @@ kubectl directpv install
 - The deamonset used by DirectPV requires the following open ports:
   - `10443` for metrics 
   - Port `30443` for readiness handlers
+
+{{< admonition type="note" >}}
+To install DirectPV on selected nodes, using tolerations, or with a non-standard `kubelet` directory, see the [custom installation](#custom-installation) section below.
+{{< /admonition >}}
 
 ### List discovered drives
 
@@ -204,32 +207,53 @@ for image in ${images[*]}; do pull_tag_push $image $(privatize $image); done
 
 ## Custom Installation
 
-To perform additional customizations, generate an install yaml file, customize it, then use the file to install DirectPV.
+### Install on Selected Nodes
 
-1. Generate the specification for installing DirectPV.
+To install DirectPV on selected nodes, use `--node-selector` flag to `install` command. 
 
-   ```sh {.copy}
-   kubectl directpv install -o yaml > directpv-install.yaml
-   ```
+```sh
+kubectl directpv info
+# Install DirectPV on nodes having label 'group-name' key and 'bigdata' value
+$ kubectl directpv install --node-selector group-name=bigdata
+```
 
-2. Open the generated file in a text editor and make changes.
-   This command uses the CLI editor `nano`.
-  
-   ```sh {.copy}
-   nano directpv-install.yaml
-   ```
+### Installing on tainted nodes
+To install DirectPV on tainted nodes, use `--toleration` flag to `install` command.
 
-   Replace `nano` with your preferred text editor.
+The following example installs DirectPV on tainted nodes by tolerating 'key1' key where the value of the key is 'PVs' value with 'NoSchedule' effect
 
-3. Install a customized DirectPV
+```sh {.copy}
+kubectl directpv install --tolerations key1=PVs:NoSchedule
+```
 
-   ```sh {.copy}
-   kubectl create -f directpv-install.yaml
-   ```
+The following example installs DirectPV on tainted nodes by tolerating the existence of the 'key2' key (regardless of any value assigned to the key), with the 'NoExecute' effect.
 
-{{< admonition title="Updating Custom Installations" type="important" >}}
-Custom installations do not support client-side upgrade functionality. 
-Use `kubectl directpv migrate` to migrate the old resources to a new installation.
-{{< /admonition >}}
+```sh {.copy}
+$ kubectl directpv install --tolerations key2:NoExecute
+```
+
+### Installing on non-standard `kubelet` directory
+
+To install on non-standard `kubelet` directory, set the `KUBELET_DIR_PATH` environment variable before starting the installation.
+
+```sh {.copy}
+export KUBELET_DIR_PATH=/path/to/my/kubelet/dir
+kubectl directpv install
+```
+
+### Installing on Openshift
+
+To install DirectPV on Openshift with specific configuration, use the `--openshift` flag.
+
+```sh {.copy}
+$ kubectl directpv install --openshift
+```
+
+### Install with a Script
 
 
+The following command downloads and runs an install.sh script file to perform a standard installation of DirectPV on all nodes.
+
+```sh {.copy}
+curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh - apply
+```

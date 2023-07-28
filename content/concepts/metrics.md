@@ -8,8 +8,36 @@ tableOfContents: true
 
 ## Monitoring Guidelines
 
-DirectPV nodes export Prometheus compatible metrics data by exposing a metrics endpoint at `/directpv/metrics`. 
-Users looking to monitor their tenants can point their Prometheus configuration to scrape data from this endpoint.
+DirectPV nodes export Prometheus compatible metrics data via port `10443`. 
+
+To scrape data in Prometheus, each node must be accessible by port `10443`. 
+
+1. Make node server metrics port accessible by localhost:8080
+   
+   ```sh {.copy}
+   kubectl -n directpv port-forward node-server-4nd6q 8080:10443
+   ```
+
+2. Add the following to your Prometheus configuration.
+
+   ```yaml {.copy}
+   scrape_configs:
+     - job_name: 'directpv-monitor'
+       # Override the global default and scrape targets from this job every 5 seconds.
+       scrape_interval: 5s
+       static_configs:
+         - targets: ['localhost:8080']
+           labels:
+             group: 'production'
+   ```
+
+3. Run a Prometheus query with promQL in the Prometheus web interface to test the configurfation.
+  
+   For example, the following query returns the total bytes metric for `node1`.
+
+   ```promQL {.copy}
+   directpv_stats_bytes_total{node="node1"}
+   ```
 
 ## Supported Metrics
 
@@ -29,18 +57,14 @@ global:
   scrape_interval: 15s
   external_labels:
     monitor: 'directpv-monitor'
-
 scrape_configs:
-
 - job_name: 'directpv-metrics'
   scheme: http
   metrics_path: /directpv/metrics
   authorization:
     credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-
   kubernetes_sd_configs:
   - role: pod
-
   relabel_configs:
   - source_labels: [__meta_kubernetes_namespace]
     regex: "directpv-(.+)"
@@ -52,7 +76,6 @@ scrape_configs:
     regex: "healthz"
     action: drop
     target_label: kubernetes_port_name
-
 - job_name: 'kubernetes-cadvisor'
   scheme: https
   metrics_path: /metrics/cadvisor
@@ -61,10 +84,8 @@ scrape_configs:
     insecure_skip_verify: true
   authorization:
     credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-
   kubernetes_sd_configs:
   - role: node
-
   relabel_configs:
   - action: labelmap
     regex: __meta_kubernetes_node_label_(.+)

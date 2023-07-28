@@ -9,7 +9,7 @@ tableOfContents: true
 ## replace.sh
 
 Use the below script to replace a drive.
-See [replacing a drive]({{< relref "manage-drives/_index.md#replace-drive" >}}) for more information on how to use this script.
+See [replacing a drive]({{< relref "drives/_index.md#replace-drive" >}}) for more information on how to use this script.
 
 ```sh {.copy}
 #!/usr/bin/env bash

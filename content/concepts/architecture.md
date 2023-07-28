@@ -46,7 +46,7 @@ It handles the following requests:
 * `Create volume`
 
   The controller server creates a new `DirectPVVolume` CRD after reversing requested storage space on a suitable `DirectPVDrive` CRD. 
-  For more information, refer to the [Volume scheduling guide]({{< relref "volume-scheduling/_index.md" >}}).
+  For more information, refer to the [Volume scheduling guide]({{< relref "volumes/scheduling.md" >}}).
 
 * `Delete volume`
   
@@ -97,8 +97,6 @@ It handles the following requests:
 * `Expand volume`
  
   The Controller server expands the `DirectPVVolume` CRD after reversing requested storage space in the `DirectPVDrive` CRD.
-
-
 
 ## Node server
 

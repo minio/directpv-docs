@@ -40,7 +40,7 @@ For these managed disks, DirectPV:
 
 1. Selects disks local to the node where the pod is scheduled, providing direct access for the pods to the disks. 
 
-2. Runs a [selection algorithm]({{< relref "volume-scheduling/_index.md" >}}) to choose a disk for a volume creation request.
+2. Runs a [selection algorithm]({{< relref "volumes/scheduling.md#drive-selection" >}}) to choose a disk for a volume creation request.
 
 3. Creates a sub-directory for the volume with quota set on the sub-directory for the requested volume size.
 

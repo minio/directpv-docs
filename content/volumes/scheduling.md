@@ -5,7 +5,6 @@ lastmod: :git
 draft: false
 tableOfContents: true
 heading: true
-weight: 40
 ---
 
 ## Overview
@@ -13,7 +12,8 @@ weight: 40
 DirectPV provisions drives for pods that provide a `PersistentVolumeClaim` for the DirectPV storage class.
 
 `DirectPV` includes a storage class named `directpv-min-io` with [volume binding mode](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode) `WaitForFirstConsumer`.
-This mode delays volume binding and provisioning of a `PersistentVolume` until the creation of a `Pod` using the `PersistentVolumeClaim`. 
+This mode delays volume binding and provisioning of a `PersistentVolume` until the creation of a `Pod` using the `PersistentVolumeClaim`.
+DirectPV then selects or provisions PersistentVolumes that match the topology specified in the Pod's scheduling constraints.
 
 ## Volume Constraints
 
@@ -22,7 +22,7 @@ DirectPV selects and provisions Persistent Volumes that conform to the topology 
 
 Some examples of scheduling restraints include:
 
-- resource requirements such as capacity
+- resource requirements, such as capacity
 - node selectors
 - pod affinity and anti-affinity
 - taints and tolerations
@@ -53,3 +53,39 @@ Note the following behaviors:
   All other requests fail and retry.
 
 ![Flowchart of the decision tree to schedule a drive](scheduled-diagram.png)
+
+## Customizing drive selection
+
+Apart from controlling drive selection based on node selectors, pod affinity and anti-affinity, and taints and tolerations, DirectPV can use drive labels to pick specific drives with a custom storage class for volume scheduling. 
+
+* Label selected drives by [label drives](./command-reference.md#drives-command-1) command.
+
+  ```sh
+  # Label the 'nvme1n1' drive in all nodes as 'fast' with the 'tier' key.
+  kubectl directpv label drives --drives=nvme1n1 tier=fast
+  ```
+
+* Create a new storage class with drive labels using the [create-storage-class.sh script](../scripts.md#create-storage-class).
+
+  ```sh
+  # Create new storage class 'fast-tier-storage' with drive labels 'directpv.min.io/tier: fast'
+  create-storage-class.sh fast-tier-storage 'directpv.min.io/tier: fast'
+  ```
+
+* Use newly created storage class in [volume provisioning](./volume-provisioning.md). 
+ 
+  ```sh
+  $ kubectl apply -f - <<EOF
+  apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: sleep-pvc
+  spec:
+    volumeMode: Filesystem
+    storageClassName: fast-tier-storage
+    accessModes: [ "ReadWriteOnce" ]
+    resources:
+      requests:
+        storage: 8Mi
+  EOF
+  ```

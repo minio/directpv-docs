@@ -27,7 +27,7 @@ tableOfContents: true
 | `name`                 | `directpv-min-io`        |
 | `provisioner`          | `directpv-min-io`        |
 | `reclaimPolicy`        | `Delete`                 |
-| `allowVolumeExpansion` | `false`                  |
+| `allowVolumeExpansion` | `true`                  |
 | `volumeBindingMode`    | `WaitForFirstConsumer`   |
 
 ### DirectPVDrives CRD
