@@ -53,8 +53,8 @@ Such additional layers of disaggregation result in increased complexity and poor
  
 ## Frequently Asked Questions
 
-- [Frequently Asked Questions]({{< relref "/content/faqs/_index.md" >}})
-- [Troubleshooting]({{< relref "/content/faqs/troubleshooting.md" >}})
+- [Frequently Asked Questions]({{< relref "/content/support/_index.md" >}})
+- [Troubleshooting]({{< relref "/content/support/troubleshooting.md" >}})
 
 ## Command Line Interface (CLI)
 
