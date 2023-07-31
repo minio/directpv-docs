@@ -1,11 +1,10 @@
 ---
-title: Volume Management
+title: Manage Volumes
 date: 2023-05-17
 lastmod: :git
 draft: false
 tableOfContents: true
-heading: true
-weight: 40
+weight: 30
 ---
 
 ## Prerequisites
@@ -18,11 +17,11 @@ weight: 40
   To install the driver, refer to the [driver installation guide]({{< relref "/installation/_index.md#driver-installation" >}}).
 * Added drives in DirectPV. 
  
-  Refer to the [drive management guide]({{< relref "drives/_index.md" >}}).
+  Refer to the [drive management guide]({{< relref "/resource-management/drives.md" >}}).
 
 ## Add volume
 
-Refer to the [volume provisioning guide]({{< relref "/volumes/provisioning.md" >}}).
+Refer to the [volume provisioning guide]({{< relref "/resource-management/provisioning.md" >}}).
 
 ## List volume
 

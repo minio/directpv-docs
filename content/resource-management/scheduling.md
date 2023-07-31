@@ -1,10 +1,10 @@
 ---
-title: Volume Scheduling Overview
+title: Volume Scheduling
 date: 2023-05-17
 lastmod: :git
 draft: false
 tableOfContents: true
-heading: true
+weight: 50
 ---
 
 ## Overview
@@ -65,7 +65,7 @@ Apart from controlling drive selection based on node selectors, pod affinity and
   kubectl directpv label drives --drives=nvme1n1 tier=fast
   ```
 
-* Create a new storage class with drive labels using the [create-storage-class.sh script](../scripts.md#create-storage-class).
+* Create a new storage class with drive labels using the [create-storage-class.sh script]({{< relref "/resource-management/scripts.md#create-storage-class" >}}).
 
   ```sh
   # Create new storage class 'fast-tier-storage' with drive labels 'directpv.min.io/tier: fast'

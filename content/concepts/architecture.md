@@ -46,7 +46,7 @@ It handles the following requests:
 * `Create volume`
 
   The controller server creates a new `DirectPVVolume` CRD after reversing requested storage space on a suitable `DirectPVDrive` CRD. 
-  For more information, refer to the [Volume scheduling guide]({{< relref "volumes/scheduling.md" >}}).
+  For more information, refer to the [Volume scheduling guide]({{< relref "/resource-management/scheduling.md" >}}).
 
 * `Delete volume`
   
@@ -314,7 +314,7 @@ The DirectPV container acts as a central controller and implements the following
 - [DeleteVolume](https://github.com/container-storage-interface/spec/blob/master/spec.md#deletevolume)
 
 The DirectPV container selects a suitable drive for a volume scheduling request. 
-The [selection algorithm]({{< relref "volume-scheduling/_index.md#drive-selection" >}}) looks for range and topology specifications provided in the `CreateVolume` request and selects a drive based on its free capacity.
+The [selection algorithm]({{< relref "/resource-management/scheduling.md#drive-selection" >}}) looks for range and topology specifications provided in the `CreateVolume` request and selects a drive based on its free capacity.
 
 {{< admonition type="note" >}}
 The `kube-scheduler` maintains responsibility for selecting a node for a pod.

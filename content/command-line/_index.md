@@ -22,14 +22,21 @@ kubectl krew install directpv
 ```
 
 {{< admonition type="note">}}
-For more complete instructions on installing DirectPV, see the [installation page]({{< relref "installation/_index.md" >}}).
+For more complete instructions on installing DirectPV, including installing with a binary instead of using `krew`, see the [installation page]({{< relref "installation/_index.md" >}}).
 {{< /admonition>}}
-
 
 ## Usage
 
+If installed with `krew`, use
+
 ```sh
-  directpv [command] [flags]
+kubectl directpv [command] [flags]
+```
+
+If installed as a binary, use
+
+```sh
+kubectl-directpv [command] [flags]
 ```
 
 ## Flags

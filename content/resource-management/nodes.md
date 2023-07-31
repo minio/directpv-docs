@@ -4,8 +4,7 @@ date: 2023-07-26
 lastmod: :git
 draft: false
 tableOfContents: true
-heading: true
-weight: 30
+weight: 10
 ---
 
 ## Prerequisites

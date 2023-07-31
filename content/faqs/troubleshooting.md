@@ -4,6 +4,7 @@ date: 2023-05-17
 lastmod: :git
 draft: false
 tableOfContents: true
+weight: 200
 ---
 
 ## DirectPV installation fails in my Kubernetes. Why?
@@ -47,7 +48,7 @@ Additionally, Local Persistent Volumes lifecycle requires administrative skills.
 DirectPV dynamically provisions volumes on-demand that are persistent through pod/node restarts. 
 The lifecycle of DirectPV volumes are managed by associated Persistent Volume Claims (PVCs), simplifying volume management.
 
-### I see `no drive found ...` error message in my Persistent Volume Claim. Why?
+## I see `no drive found ...` error message in my Persistent Volume Claim. Why?
 
 The table below lists possible reasons and solutions.
 
@@ -59,24 +60,30 @@ The table below lists possible reasons and solutions.
 | Requested drive is not found on the requested node.          | Modify Persistent Volume Claim.         |
 | Requested node is not DirectPV node.                         | Modify Persistent Volume Claim.         |
 
-### I see Persistent Volume Claim is created, but respective DirectPV volume is not created. Why?
+## I see Persistent Volume Claim is created, but respective DirectPV volume is not created. Why?
 
 DirectPV comes with [WaitForFirstConsumer](https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode) volume binding mode.
 This means that a Pod to consume the volume must be scheduled first.
 
-### I see volume consuming Pod still in `Pending` state. Why?
+## I see volume consuming Pod still in `Pending` state. Why?
 
 * If you haven't created the respective Persistent Volume Claim, create it.
 * You may be facing Kubernetes scheduling problem. 
   Refer to the Kubernetes documentation [on scheduling](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
 
-### I see `volume XXXXX is not yet staged, but requested with YYYYY` error. Why?
+## I see `volume XXXXX is not yet staged, but requested with YYYYY` error. Why?
 
 According to CSI specification, `Kubelet` should call `StageVolume` RPC first, then `PublishVolume` RPC next. 
 In a rare event, `StageVolume` RPC is not fired/called, but `PublishVolume` RPC is called. 
 Restart your Kubelet and report this issue to your Kubernetes provider.
 
-### I see ```unable to find device by FSUUID xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx; either device is removed or run command `sudo udevadm control --reload-rules && sudo udevadm trigger` on the host to reload``` error. Why?
+## I see a `udev` error. Why?
+
+You may very rarely see a `udev` error:
+
+```sh
+unable to find device by FSUUID xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx; either device is removed or run command `sudo udevadm control --reload-rules && sudo udevadm trigger` on the host to reload
+```
 
 In a rare event, `Udev` in your system missed updating `/dev` directory. 
 Run the following command to update and reload `udev`, then report this issue to your OS vendor.

@@ -4,7 +4,7 @@ date: 2023-07-27
 lastmod: :git
 draft: false
 tableOfContents: true
-heading: true
+weight: 40
 ---
 
 ## Overview
@@ -155,4 +155,4 @@ spec:
 
 ## Further reads
 
-* [Volume scheduling guide]({{< relref "/volumes/scheduling.md" >}})
+* [Volume scheduling guide]({{< relref "/resource-management/scheduling.md" >}})

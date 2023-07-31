@@ -1,11 +1,10 @@
 ---
-title: Managing Drives and Nodes
+title: Managing Drives
 date: 2023-05-17
 lastmod: :git
 draft: false
-heading: true
-tableOfContents: true
-weight: 30
+tableOfContents: false
+weight: 20
 ---
 
 ## Prerequisites
@@ -131,7 +130,7 @@ $ kubectl directpv label drives tier=hot
 $ kubectl directpv label drives tier-
 ```
 
-Once set, use labels to [schedule drives]({{< relref "volumes/scheduling.md" >}}).
+Once set, use labels to [schedule drives]({{< relref "resource-management/scheduling.md" >}}).
 
 Refer to the [label drives command]({{< relref "command-line/label-drives.md" >}}) for more information.
 
@@ -140,7 +139,7 @@ Refer to the [label drives command]({{< relref "command-line/label-drives.md" >}
 Replace a faulty drive with a new drive on a same node. 
 In this process, all volumes in the faulty drive are moved to the new drive then faulty drive is removed from DirectPV. 
 Currently, DirectPV does not support moving data on the volume to the new drive. 
-Use the [replace.sh]({{< relref "drives/scripts.md#replace.sh" >}}) script to perform drive replacement. 
+Use the [replace.sh]({{< relref "/resource-management/scripts.md#replace.sh" >}}) script to perform drive replacement. 
 
 Below is an example:
 

@@ -41,20 +41,16 @@ Such additional layers of disaggregation result in increased complexity and poor
 - [Metrics and Monitoring]({{< relref "/content/concepts/metrics.md" >}})
 - [DirectPV Specification]({{< relref "/content/concepts/specification.md" >}}) 
 
-## Managing drives and nodes
+## Managing Resources
 
-- [Manage Drives and Nodes]({{< relref "/content/drives/_index.md" >}})
-- [Manage Nodes]({{< relref "/content/nodes/_index.md" >}})
-- [Scripts]({{< relref "/content/drives/scripts.md" >}})
+- [Resource Types]({{< relref "/content/resource-management/_index.md" >}})
+- [Drives]({{< relref "/content/resource-management/drives.md" >}})
+- [Nodes]({{< relref "/content/resource-management/nodes.md" >}})
+- [Volumes]({{< relref "/content/resource-management/volumes.md" >}})
+- [Schedule volumes by labels]({{< relref "/content/resource-management/schedule-by-label.md" >}})
+- [Schedule volumes]({{< relref "/content/resource-management/scheduling.md" >}})
+- [Useful Scripts]({{< relref "/content/resource-management/scripts.md" >}})
  
-## Volume Scheduling
-
-- [Volumes Overview]({{< relref "/content/volumes/_index.md" >}})
-- [Provisioning]({{< relref "/content/volumes/provisioning.md" >}})
-- [Scheduling by label]({{< relref "/content/volumes/schedule-by-label.md" >}})
-- [Scheduling Overview]({{< relref "/content/volumes/scheduling.md" >}})
-- [Volume Scripts]({{< relref "/content/volumes/scripts.md" >}})
-
 ## Frequently Asked Questions
 
 - [Frequently Asked Questions]({{< relref "/content/faqs/_index.md" >}})

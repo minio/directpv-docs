@@ -74,6 +74,10 @@ $ chmod a+x kubectl-directpv
 $ mv kubectl-directpv /usr/local/bin/kubectl-directpv
 ```
 
+{{< admonition type="tip" >}}
+When using the binary, invoke the commands with `kubectl-directpv` instead of `kubectl directpv`.
+{{< /admonition >}}
+
 ## Driver Installation
 
 Install the DirectPV Driver to your Kubernetes deployment.
@@ -82,11 +86,15 @@ Install the DirectPV Driver to your Kubernetes deployment.
 For installation in production grade environments, ensure you satisfy all criteria in the [Production Readiness Checklist](#production-readiness-checklist).
 {{< /admonition >}}
 
-### Prerequisites
+### Standard Installation
+
+A standard installation uses default options and installs DirectPV on all nodes.
+
+#### Prerequisites
 
 * Kubernetes >= v1.18 on GNU/Linux on amd64.
  
-* If you use private registry, below images must be pushed into your registry. You could use [this helper script]({{< relref "drives/scripts.md#push-images.sh" >}}) to do that.
+* If you use private registry, below images must be pushed into your registry. You could use [this helper script]({{< relref "/resource-management/scripts.md#push-images.sh" >}}) to do that.
   - quay.io/minio/csi-node-driver-registrar:v2.8.0
   - quay.io/minio/csi-provisioner:v3.5.0 _(for Kubernetes >= v1.20)_
   - quay.io/minio/csi-provisioner:v2.2.0-go1.18 _(for kubernetes < v1.20)_
@@ -106,9 +114,9 @@ For installation in production grade environments, ensure you satisfy all criter
 
 * Review the [driver specification documentation]({{< relref "concepts/specification.md" >}})
 
-* For Red Hat Openshift users, refer to the [Openshift specific documentation]({{< relref "installation/openshift.md" >}}) for configuration prior to installing DirectPV.
+* For Red Hat OpenShift users, refer to the [OpenShift specific documentation]({{< relref "installation/openshift.md" >}}) for configuration prior to installing DirectPV.
 
-### Procedure
+#### Procedure
 The installation process creates a new storage class named `directpv-min-io`.
 You can provision DirectPV volumes by using this storage class as the `storageClassName` in `PodSpec.VolumeClaimTemplates`.
 
@@ -118,7 +126,7 @@ For an example of using `directpv-min-io`, see the [MinIO example on GitHub](htt
 
 Refer to the [CLI Guide]({{< relref "command-line/_index.md" >}}) for more helpers on the following commands.
 
-### Install the driver
+#### Install the driver
 
 Install the `directpv-min-io` CSI driver on all nodes in the kubernetes cluster.
 
@@ -138,7 +146,7 @@ kubectl directpv install
 To install DirectPV on selected nodes, using tolerations, or with a non-standard `kubelet` directory, see the [custom installation](#custom-installation) section below.
 {{< /admonition >}}
 
-### List discovered drives
+#### List discovered drives
 
 List all available drives in the kubernetes cluster.
 DirectPV generates an `init` config file (default: `drives.yaml`) you can use to initialize these drives.
@@ -149,7 +157,7 @@ kubectl directpv discover
 
 Check the contents of the file and modify the file as needed to remove any drives that DirectPV should not control.
 
-### Initialize the drives
+#### Initialize the drives
 
 ```sh {.copy}
 kubectl directpv init drives.yaml
@@ -163,7 +171,7 @@ Initialization erases all existing data on the drives.
 Verify that only intended drives are specified in the file passed to the init command.
 {{< /admonition >}}
 
-### Verify installation
+#### Verify installation
 
 After initializing the drives, show information about the drives formatted and added to DirectPV.
 
@@ -171,8 +179,16 @@ After initializing the drives, show information about the drives formatted and a
 kubectl directpv info
 ```
 
+#### Install with a Script
 
-## Air-gapped Installation (Private Registry)
+The following command downloads and runs an `install.sh` script file to perform a standard installation of DirectPV on all nodes.
+
+```sh {.copy}
+curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh - apply
+```
+
+
+### Air-gapped Installation (Private Registry)
 
 Push the following images to your private registry
  
@@ -205,9 +221,17 @@ function pull_tag_push(){ docker pull $1 &&  docker tag $1 $2 && docker push $2;
 for image in ${images[*]}; do pull_tag_push $image $(privatize $image); done
 ```
 
-## Custom Installation
+### Install on OpenShift
 
-### Install on Selected Nodes
+To install DirectPV on OpenShift with specific configuration, use the `--openshift` flag.
+
+```sh {.copy}
+$ kubectl directpv install --openshift
+```
+
+### Custom Installation
+
+#### Install on Selected Nodes
 
 To install DirectPV on selected nodes, use `--node-selector` flag to `install` command. 
 
@@ -217,7 +241,7 @@ kubectl directpv info
 $ kubectl directpv install --node-selector group-name=bigdata
 ```
 
-### Installing on tainted nodes
+#### Install on Tainted Nodes
 To install DirectPV on tainted nodes, use `--toleration` flag to `install` command.
 
 The following example installs DirectPV on tainted nodes by tolerating 'key1' key where the value of the key is 'PVs' value with 'NoSchedule' effect
@@ -232,28 +256,11 @@ The following example installs DirectPV on tainted nodes by tolerating the exist
 $ kubectl directpv install --tolerations key2:NoExecute
 ```
 
-### Installing on non-standard `kubelet` directory
+#### Install on Non-standard `kubelet` Directory
 
 To install on non-standard `kubelet` directory, set the `KUBELET_DIR_PATH` environment variable before starting the installation.
 
 ```sh {.copy}
 export KUBELET_DIR_PATH=/path/to/my/kubelet/dir
 kubectl directpv install
-```
-
-### Installing on Openshift
-
-To install DirectPV on Openshift with specific configuration, use the `--openshift` flag.
-
-```sh {.copy}
-$ kubectl directpv install --openshift
-```
-
-### Install with a Script
-
-
-The following command downloads and runs an install.sh script file to perform a standard installation of DirectPV on all nodes.
-
-```sh {.copy}
-curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh - apply
 ```
