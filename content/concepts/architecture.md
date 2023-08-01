@@ -18,7 +18,6 @@ When DirectPV contains legacy volumes from `DirectCSI`, the following additional
 ## Controller
 
 ![Diagram showing the flow of events from a Persistent Volume Claim through the CSI Provisioner or CSI Resizer to the Controller Server and finally to changes in either the DirectPVDrive CRD or the DirectPVVolume CRD](../PVC-events.png)
-
 The Controller runs as `Deployment` Pods named `controller`.
 These are three replicas located in any Kubernetes nodes. 
 The replicas elect one instance to serve requests. 

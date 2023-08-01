@@ -52,7 +52,7 @@ Note the following behaviors:
 - In the event two or more parallel requests schedule the same drive, the drive successfully schedules for one request. 
   All other requests fail and retry.
 
-![Flowchart of the decision tree to schedule a drive](scheduled-diagram.png)
+![Flowchart of the decision tree to schedule a drive](../scheduled-diagram.png)
 
 ## Customizing drive selection
 
