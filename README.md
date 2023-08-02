@@ -39,7 +39,7 @@ The DirectPV docs use [Hugo](https://www.gohogo.io) to generate static HTML page
 
 4. `cd themes/kes-doc-theme`
 5. `npm install`
-6. `npm build`
+6. `npm run build`
 7. `cd ../../`
   
 ## Update Theme from Upstream Repository

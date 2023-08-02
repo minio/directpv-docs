@@ -16,7 +16,7 @@ Use [`kubectl directpv migrate`]({{< relref "/command-line/migrate.md" >}}) to m
 
 ### Offline upgrade
 
-Follow the below steps for an offline upgrade
+Follow the steps below to perform an offline upgrade:
 
 1. Uninstall the DirectPV CSI driver.
    
@@ -25,7 +25,7 @@ Follow the below steps for an offline upgrade
    ```sh {.copy}
    kubectl directpv uninstall
    ```
-2. Upgrade the DirectPV plugin 
+2. Upgrade the DirectPV plugin.
 
    ```sh
    kubectl krew upgrade directpv
@@ -36,8 +36,10 @@ Follow the below steps for an offline upgrade
 3. [Install the latest DirectPV CSI driver]({{< relref "/installation/_index.md#driver-installation" >}}).
 
 #### In-place upgrade
-Follow the below steps for an in-place upgrade
-1. Upgrade DirectPV plugin by [this documentation](#upgrade-directpv-plugin).
+
+Follow the steps below to perform an in-place upgrade:
+
+1. Use the following command to upgrade the DirectPV `krew` plugin:
 
    ```shb {.copy}
    kubectl krew upgrade directpv
@@ -46,7 +48,7 @@ Follow the below steps for an in-place upgrade
    If you use the binary instead of `krew`, download the latest binary for your operating system and architecture.
 
 
-2. Run the install script with all appropriate node-selector, tolerations, and `KUBELET_DIR_PATH` environment variables.
+2. Run the install script with the appropriate node-selector, tolerations, and `KUBELET_DIR_PATH` environment variables needed for your environment.
 
    ```sh {.copy}
    curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh - apply
@@ -67,7 +69,7 @@ In the latest version of DirectPV, the CSI sidecar images have been updated.
    kubectl direct-csi uninstall
    ```
 
-2. Upgrade or install the latest version of the DirectPV plugin
+2. Upgrade or install the latest version of the DirectPV plugin.
    
    ```sh {.copy}
    kubectl krew upgrade directpv
@@ -83,19 +85,19 @@ In the latest version of DirectPV, the CSI sidecar images have been updated.
 
    Change `direct.csi.min.io/access-tier: <your_access_tier_value>` to `directpv.min.io/access-tier: <your_access_tier_value>` in the respective storage class parameters section.
 
-4. Install the updated version of Direct-CSI
+4. Install the updated version of Direct-CSI.
    
    ```sh {.copy}
    kubectl directpv install
    ```
 
-5. Check that pods are running
+5. Check that the pods are running.
    
    ```sh {.copy}
    kubectl get pods -n direct-csi-min-io -w
    ```
 
-6. Verify you can reach DirectPV drives
+6. Verify you can reach the DirectPV drives.
    
    ```sh {.copy}
    kubectl directpv drives ls
@@ -175,7 +177,7 @@ main "$@"
 
 ## Upgrade from versions < v3.2.x
 
-If you are on DirectCSI version < 3.2.2, upgrade to v3.2.2, then to the latest
+If you are on DirectCSI version < 3.2.2, first upgrade to v3.2.2, then upgrade to the latest version.
 
 1. Uninstall the existing setup.
 
@@ -185,7 +187,7 @@ If you are on DirectCSI version < 3.2.2, upgrade to v3.2.2, then to the latest
    kubectl direct-csi uninstall
    ```
 
-2. Confirm the deletion of the CSI pods 
+2. Confirm the deletion of the CSI pods.
 
    ```sh {.copy}
    kubectl get pods -n direct-csi-min-io
@@ -194,7 +196,7 @@ If you are on DirectCSI version < 3.2.2, upgrade to v3.2.2, then to the latest
    DirectPV v4.0.0 and later do not use the `direct-cs-min-io` namespace when creating new drives or volumes.
    However, the latest versions of DirectPV can continue to use resources already existing in that namespace.
 
-3. Download Direct-CSI v3.2.2 from https://github.com/minio/directpv/releases/tag/v3.2.2
+3. Download Direct-CSI v3.2.2 from https://github.com/minio/directpv/releases/tag/v3.2.2.
 
 4. Load the following images:
 
@@ -206,19 +208,19 @@ If you are on DirectCSI version < 3.2.2, upgrade to v3.2.2, then to the latest
   
    If your kubernetes version is less than v1.20, also push `quay.io/minio/csi-provisioner:v2.2.0-go1.18`
 
-5. Install the updated version of Direct-CSI
+5. Install the updated version of Direct-CSI.
    
    ```sh {.copy}
    kubectl direct-csi install
    ```
 
-6. Check that pods are running
+6. Check that the pods are running.
    
    ```sh {.copy}
    kubectl get pods -n direct-csi-min-io -w
    ```
 
-7. Verify you can reach DirectPV drives
+7. Verify you can reach the DirectPV drives.
    
    ```sh {.copy}
    kubectl direct-csi drives ls

@@ -26,7 +26,7 @@ Refer to the [volume provisioning guide]({{< relref "/resource-management/provis
 ## List volume
 
 To get information of volumes from DirectPV, run the [`list volumes`]({{< relref "/command-line/list-volumes.md" >}}) command.
-The output may resemble the following:
+The output resembles the following:
 
 ```sh
 $ kubectl directpv list drives
@@ -40,10 +40,10 @@ $ kubectl directpv list drives
 
 ## Expand volume
 
-DirectPV supports online volume expansion which does not require restart of the pods using those volumes. 
-This is automatically done after expanding the size for the related `Persistent Volume Claim`.
+DirectPV supports online volume expansion without requiring a restart of the pods using those volumes. 
+This is done automatically after expanding the size for the related `Persistent Volume Claim` (PVC).
 
-1. Get the PVC yaml
+1. Get the PVC YAML
    
    kubectl get pvc [PersistentVolumeClaimName] -o yaml > my-file-name.yaml
 2. In the PVC, modify `spec.resources.requests.storage` to change the requested size.
@@ -60,9 +60,10 @@ This is automatically done after expanding the size for the related `Persistent 
 THIS IS DANGEROUS OPERATION WHICH LEADS TO DATA LOSS
 {{< /admonition >}}
 
-Volume can be deleted only if no pod is using the volume and it is in `Ready` state. 
-Run the `kubectl delete pvc` command which triggers DirectPV volume deletion. 
-As removing a volume leads to data loss, double check what volume you are deleting.
+A volume can be deleted _only_ if no pod is using the volume _and_ it is in the `Ready` state. 
+Run the `kubectl delete pvc` command to trigger DirectPV volume deletion. 
+Deleting a volume results in permanent data loss.
+Be sure to confirm the volume you are deleting.
 
 ```sh
 # Delete `sleep-pvc` volume

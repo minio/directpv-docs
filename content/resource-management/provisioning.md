@@ -153,6 +153,6 @@ spec:
           storage: 16Mi
 ```
 
-## Further reads
+## Further reading
 
 * [Volume scheduling guide]({{< relref "/resource-management/scheduling.md" >}})

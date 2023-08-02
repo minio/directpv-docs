@@ -22,14 +22,17 @@ weight: 20
 ### Add drives
 
 DirectPV must have access to drives to provision volumes. 
-This involves a two step process.
+This involves a two step process:
 
 1. Run the [`discover`]({{< relref "command-line/discover.md" >}}) command.
    
    The `discover` command probes for eligible drives from DirectPV nodes and stores drive information in a YAML file. 
-   You should carefully examine the YAML file and set the `select` field to `yes` or `no` value to indicate drive selection. 
+   Examine the generated YAML file and set the `select` field to `yes` for each drive you want to add.
+   If you do not want to add a particular drive, set its `select` value to `no`. 
    
-   The `select` field is set to `yes` value by default for all discovered drives. 
+   DirectPV sets the `select` field to `yes` for all discovered drives by default.
+   You must manually deselect any discovered drives that DirectPV should not format and use.
+   Review the generated YAML file carefully.
    
    Below is an example of the `discover` command:
    
@@ -70,15 +73,15 @@ This involves a two step process.
    
    ```
 
-3. Run the [`init`]({{< relref "command-line/init.md" >}}) command.
+2. Run the [`init`]({{< relref "command-line/init.md" >}}) command.
 
    The `init` command creates a request to add the selected drives in the YAML file generated using the `discover` command in the previous step. 
    
    {{< admonition type="warning" >}}
    This process wipes out all data on the selected drives. 
-   Wrong drive selection will lead to permanent data loss. 
+   Incorrect drive selection will result in permanent data loss. 
 
-   Before running this command, modify the yaml file to mark any undesired drives as `no` for the `select` field.
+   Before running this command, modify the YAML file to mark any undesired drives as `no` for the `select` field.
    {{< /admonition >}}
    
    Below is an example of `init` command:
@@ -104,7 +107,7 @@ Refer to the [discover command]({{< relref "command-line/discover.md" >}}) and t
 
 ### List drives
 
-To get information of drives from DirectPV, run the `list drives` command. 
+To get information about drives from DirectPV, run the `list drives` command. 
 
 ```sh
 $ kubectl directpv list drives

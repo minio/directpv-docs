@@ -12,13 +12,13 @@ DirectPV nodes export Prometheus compatible metrics data via port `10443`.
 
 To scrape data in Prometheus, each node must be accessible by port `10443`. 
 
-1. Make node server metrics port accessible by localhost:8080
+1. Make node server metrics port accessible by `localhost:8080`.
    
    ```sh {.copy}
    kubectl -n directpv port-forward node-server-4nd6q 8080:10443
    ```
 
-2. Add the following to your Prometheus configuration.
+2. Add the following to your Prometheus configuration:
 
    ```yaml {.copy}
    scrape_configs:
@@ -31,9 +31,9 @@ To scrape data in Prometheus, each node must be accessible by port `10443`.
              group: 'production'
    ```
 
-3. Run a Prometheus query with promQL in the Prometheus web interface to test the configurfation.
+3. Run a Prometheus query with PromQL in the Prometheus web interface to test the configuration.
   
-   For example, the following query returns the total bytes metric for `node1`.
+   For example, the following query returns the total bytes metric for `node1`:
 
    ```promQL {.copy}
    directpv_stats_bytes_total{node="node1"}
@@ -50,7 +50,7 @@ These metrics are categorized by labels ['tenant', 'volumeID', 'node'] and repre
 
 ## Configuration
 
-Apply the following Prometheus config to scrape the metrics exposed. 
+Apply the following Prometheus config to scrape the metrics exposed:
 
 ```yaml {.copy}
 global:
@@ -101,7 +101,7 @@ scrape_configs:
 
 Prometheus supports filtering results with the [PromQL language](https://prometheus.io/docs/prometheus/latest/querying/basics/).
 
-For example, use the following promQL to query the volume stats.
+For example, use the following PromQL to query the volume stats:
 
 - To filter the volumes scheduled in `node-3`
 

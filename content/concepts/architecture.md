@@ -18,8 +18,9 @@ When DirectPV contains legacy volumes from `DirectCSI`, the following additional
 ## Controller
 
 ![Diagram showing the flow of events from a Persistent Volume Claim through the CSI Provisioner or CSI Resizer to the Controller Server and finally to changes in either the DirectPVDrive CRD or the DirectPVVolume CRD](../PVC-events.png)
+
 The Controller runs as `Deployment` Pods named `controller`.
-These are three replicas located in any Kubernetes nodes. 
+The DirectPV controller has three replicas.
 The replicas elect one instance to serve requests. 
 
 Each pod has the following containers:
@@ -38,7 +39,7 @@ Each pod has the following containers:
 
 ### Controller server
 
-The controller server runs as a container `controller` in a `controller` `Deployment` Pod. 
+The controller server runs as a container named `controller` in a `controller` `Deployment` Pod. 
 
 It handles the following requests:
 
@@ -60,8 +61,8 @@ It handles the following requests:
 ![Diagram showing the flow of events from a persistent volume claim using the legacy style direct-csi-min-io storage class through the CSI provisioner or CSI REsizer to the Controller Server and finally either the DirectPVDrive CRD or the DirectPVVolume CRD](../legacy-pvc-events.png)
 
 The Legacy controller runs as `Deployment` Pods named `legacy-controller`.
-These pods are three replicas located in any Kubernetes nodes. 
-The three replicas elect one instance to serve requests. 
+The Legacy controller has three replicas located in any Kubernetes nodes. 
+The replicas elect one instance to serve requests. 
 
 Each pod has the following containers:
 
@@ -81,12 +82,12 @@ Each pod has the following containers:
 
 ### Legacy controller server
 
-The kegacy controller server runs as a container `controller` in a `legacy-controller` `Deployment` Pod. 
+The Legacy controller server runs as a container `controller` in a `legacy-controller` `Deployment` Pod. 
 It handles the following requests:
 
 * `Create volume` 
  
-  The Controller server errors out for this request. 
+  The Controller server returns an error for this request. 
   DirectPV does not create new legacy DirectCSI volumes.
 
 * `Delete volume`

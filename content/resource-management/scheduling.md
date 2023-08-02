@@ -48,7 +48,7 @@ The following sequence and flowchart show how the DirectPV CSI controller select
 Note the following behaviors:
 
 - If no drives match, DirectPV returns an error.
-- In case of any error, Kubernetes retries the request.
+- In case of an error, Kubernetes retries the request.
 - In the event two or more parallel requests schedule the same drive, the drive successfully schedules for one request. 
   All other requests fail and retry.
 
@@ -56,7 +56,14 @@ Note the following behaviors:
 
 ## Customizing drive selection
 
-Apart from controlling drive selection based on node selectors, pod affinity and anti-affinity, and taints and tolerations, DirectPV can use drive labels to pick specific drives with a custom storage class for volume scheduling. 
+DirectPV has several methods for controlling drive selection.
+These include:
+
+- node selectors
+- pod affinity and anti-affinity
+- taints and tolerations
+  
+In addition to these methods, DirectPV can use _drive labels_ to pick specific drives with a custom storage class for volume scheduling. 
 
 * Label selected drives by [label drives](./command-reference.md#drives-command-1) command.
 
@@ -72,7 +79,7 @@ Apart from controlling drive selection based on node selectors, pod affinity and
   create-storage-class.sh fast-tier-storage 'directpv.min.io/tier: fast'
   ```
 
-* Use newly created storage class in [volume provisioning](./volume-provisioning.md). 
+* Use the newly created storage class in [volume provisioning](./volume-provisioning.md). 
  
   ```sh
   $ kubectl apply -f - <<EOF

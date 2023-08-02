@@ -13,7 +13,7 @@ weight: 10
   To install the plugin, refer to the [plugin installation guide]({{< relref "/installation/_index.md#plugin-installation" >}}).
 * Working DirectPV CSI driver in Kubernetes
 
-  To install the driver, refer to the [driver installation guide]({{< relref "/installation/_index.md#driver-installation" >}}
+  To install the driver, refer to the [driver installation guide]({{< relref "/installation/_index.md#driver-installation" >}}).
 
 ## Add node
 
@@ -47,4 +47,5 @@ $ kubectl directpv info
 ## Delete node
 ***CAUTION: THIS IS DANGEROUS OPERATION WHICH LEADS TO DATA LOSS***
 
-Before removing a node make sure no volumes or drives on the node are in use, then remove the node from DirectPV DaemonSet and run [remove-node.sh](./tools/remove-node.sh) script.
+Before removing a node, make sure no volumes or drives on the node are in use.
+Then, remove the node from DirectPV DaemonSet and run the [remove-node.sh](./tools/remove-node.sh) script.
