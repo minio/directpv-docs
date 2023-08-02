@@ -4,7 +4,7 @@ The DirectPV docs use [Hugo](https://www.gohogo.io) to generate static HTML page
 
 - [MinIO's DirectPV Documentation](#minios-directpv-documentation)
   - [Prerequisites](#prerequisites)
-  - [Initial Setup](#initial-setup)
+  - [Setup](#setup)
   - [Update Theme from Upstream Repository](#update-theme-from-upstream-repository)
   - [Build Preview](#build-preview)
   - [Build for production](#build-for-production)
@@ -22,23 +22,26 @@ The DirectPV docs use [Hugo](https://www.gohogo.io) to generate static HTML page
 
 - Any [operating system that Hugo supports](https://gohugo.io/installation/)
 - [nodejs](https://nodejs.org/en/download/package-manager/) 16.9.x or later
+ 
+  **Note**: Ubuntu ships with older versions of Node that Hugo does not support. Use [nvm](https://github.com/nvm-sh/nvm#installing-and-updating) to install a later version.
 - [Node Package Manager](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) installed (8.5.0 or later)
 - [Hugo installed](https://gohugo.io/installation/) (0.110.0 or later)
 
-## Initial Setup
+## Setup
 
 1. Clone this repository
-2. cd to the directory
+2. cd to the directory (`cd directpv-docs`)
 3. Initialize the theme directory submodule
 
    ```
    git submodule update --init --recursive
    ```
 
-   **Note:** You must have access to the remote theme repository, which is a private MinIO repository.
-
-4. Setup the theme as described in `themes/hugo-docs-theme/README.md`
-
+4. `cd themes/kes-doc-theme`
+5. `npm install`
+6. `npm run build`
+7. `cd ../../`
+  
 ## Update Theme from Upstream Repository
 
 The theme we use in the docs is hosted and maintained in a separate, private repository.
@@ -52,9 +55,9 @@ git submodule update --recursive --remote
 cd themes/hugo-docs-theme
 npm install
 npm run build
+cd ../../
+git add . && git commit -m "Update theme"
 ```
-
-**Note:** You must have access to the remote theme repository, which is a private MinIO repository.
 
 ## Build Preview
 
@@ -66,7 +69,7 @@ You can launch a live preview of the site as you work.
    hugo server
    ```
 
-2. In your browser, go to `localhost:1313`
+2. In your browser, go to `localhost:1313/docs/directpv/`
 
 ## Build for production
 
