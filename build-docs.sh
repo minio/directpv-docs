@@ -9,8 +9,7 @@ nvm use stable
 export PATH=${PATH}:${HOME}/.local/bin
 
 # Update theme and rebuild theme assets
-git submodule update --init --recursive
-git submodule update --recursive --remote
+git submodule update --init --recursive --remote
 cd themes/kes-docs-theme
 npm install && npm run build
 cd ../../
