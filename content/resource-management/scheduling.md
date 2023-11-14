@@ -96,3 +96,91 @@ In addition to these methods, DirectPV can use _drive labels_ to pick specific d
         storage: 8Mi
   EOF
   ```
+
+  ## Unique Drive selection
+
+  The default free capacity based drive selection leads to allocating more than one volume in a single drive for StatefulSet deployments.
+  Such selection lacks performance and high availability for an application like MinIO object storage.
+
+  To overcome this behavior, DirectPV provides a way to allocate one volume per drive. 
+  To use this feature, create a [custom storage class]({{< relref "/resource-management/schedule-by-label.md" >}}) with a label in a format such as `directpv.min.io/volume-claim-id`. 
+  
+  Below is an example to create custom storage class using the [create-storage-class.sh script]({{< relref "/resource-management/scripts.md#create-storage-class.sh" >}}):
+
+```sh {.copy}
+create-storage-class.sh tenant-1-storage 'directpv.min.io/volume-claim-id: 555e99eb-e255-4407-83e3-fc443bf20f86'
+```
+
+This custom storage class has to be used in your StatefulSet deployment. 
+Below is an example to deploy MinIO object storage:
+
+```yaml {.copy}
+kind: Service
+apiVersion: v1
+metadata:
+  name: minio
+  labels:
+    app: minio
+spec:
+  selector:
+    app: minio
+  ports:
+    - name: minio
+      port: 9000
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minio
+  labels:
+    app: minio
+spec:
+  serviceName: "minio"
+  replicas: 2
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+        directpv.min.io/organization: minio
+        directpv.min.io/app: minio-example
+        directpv.min.io/tenant: tenant-1
+    spec:
+      containers:
+      - name: minio
+        image: minio/minio
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: minio
+        - name: MINIO_SECRET_KEY
+          value: minio123
+        volumeMounts:
+        - name: minio-data-1
+          mountPath: /data1
+        - name: minio-data-2
+          mountPath: /data2
+        args:
+        - "server"
+        - "http://minio-{0...1}.minio.default.svc.cluster.local:9000/data{1...2}"
+  volumeClaimTemplates:
+  - metadata:
+      name: minio-data-1
+    spec:
+      storageClassName: tenant-1-storage
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 16Mi
+  - metadata:
+      name: minio-data-2
+    spec:
+      storageClassName: tenant-1-storage
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 16Mi
+```
