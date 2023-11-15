@@ -55,26 +55,32 @@ The following flags are available for `kubectl directpv` and many of the command
 This documentation includes details for each available command on separate subpages.
 The available commands include:
 
-| **Command**                   | **Description**                                                   |
-|-------------------------------|-------------------------------------------------------------------|
-| *Install*                     |                                                                   |
-| [`install`](install.md)       | Install DirectPV in Kubernetes                                    |
-| *Manage Drives and Volumes*   |                                                                   |
-| [`discover`](discover.md)     | Discover new drives                                               |
-| [`info`](info.md)             | Show information about DirectPV installation                      |
-| [`init`](init.md)             | Initialize drives                                                 |
-| [`label`](label.md)           | Set labels to drives and volumes                                  |
-| [`list`](list.md)             | List drives and volumes                                           |
-| *Manage Scheduling*           |                                                                   |
-| [`cordon`](cordon.md)         | Mark drives as unschedulable                                      |
-| [`uncordon`](uncordon.md)     | Mark drives as schedulable                                        |
-| *Maintenance*                 |                                                                   |
-| [`clean`](clean.md)           | Cleanup stale volumes                                             |
-| [`migrate`](migrate.md)       | Migrate drives and volumes from legacy DirectCSI                  |
-| [`move`](move.md)             | Move volumes excluding data from source drive to destination drive on a same node |
-| [`remove`](remove.md)         | Remove unused drives from DirectPV                                |
-| *Uninstall DirectPV*          |                                                                   |
-| [`uninstall`](uninstall.md)   | Uninstall DirectPV in Kubernetes                                  |
+| **Command**                             | **Description**                                                   |
+|-----------------------------------------|-------------------------------------------------------------------|
+| *Install*                               |                                                                   |
+| [`install`](install.md)                 | Install DirectPV in Kubernetes                                    |
+| *Manage Drives and Volumes*             |                                                                   |
+| [`discover`](discover.md)               | Discover new drives                                               |
+| [`info`](info.md)                       | Show information about DirectPV installation                      |
+| [`init`](init.md)                       | Initialize drives                                                 |
+| [`label drives`](label-drives.md)       | Set labels to drives                                              |
+| [`label volumes`](label-volumes.md)     | Set labels to volumes                                             |
+| [`list-drives`](list-drives.md)         | List drives                                                       |
+| [`list-volumes`](list-volumes.md)       | List volumes                                                      |
+| [`resume-drives`](resume-drives.md)     | Resume suspended drives                                           |
+| [`resume-volumes`](resume-volumes.md)   | Resume suspended volumes                                          |
+| [`suspend-drives`](suspend-drives.md)   | Suspend drives                                                    |
+| [`suspend-volumes`](suspend-volumes.md) | Suspend volumes                                                   |
+| *Manage Scheduling*                     |                                                                   |
+| [`cordon`](cordon.md)                   | Mark drives as unschedulable                                      |
+| [`uncordon`](uncordon.md)               | Mark drives as schedulable                                        |
+| *Maintenance*                           |                                                                   |
+| [`clean`](clean.md)                     | Cleanup stale volumes                                             |
+| [`migrate`](migrate.md)                 | Migrate drives and volumes from legacy DirectCSI                  |
+| [`move`](move.md)                       | Move volumes excluding data from source drive to destination drive on a same node |
+| [`remove`](remove.md)                   | Remove unused drives from DirectPV                                |
+| *Uninstall DirectPV*                    |                                                                   |
+| [`uninstall`](uninstall.md)             | Uninstall DirectPV in Kubernetes                                  |
 
 ## Command History
 

@@ -160,3 +160,28 @@ $ kubectl directpv remove --drives=vdb --nodes=node1
 ```
 
 Refer to the [remove command]({{< relref "command-line/remove.md" >}}) for more information.
+
+
+## Suspend drives
+
+{{< admonition title="Data Loss" type="caution" >}}
+THIS IS DANGEROUS OPERATION WHICH LEADS TO DATA LOSS.
+{{< /admonition >}}
+
+By Kubernetes design, a [StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) workload is active only if all of its pods are in running state. 
+A faulty drive prevents the StatefulSet from starting up. 
+
+DirectPV provides a workaround to suspend failed drives which mounts the respective volumes on empty `/var/lib/directpv/tmp` directory with read-only access. 
+This can be done by executing the [suspend drives]({{< relref "/command-line/suspend-drives.md" >}}) command. 
+
+```sh {.copy}
+kubectl directpv suspend drives af3b8b4c-73b4-4a74-84b7-1ec30492a6f0
+```
+
+Once fixed, return to normal drive functions by resuming the drive. 
+Upon resuming, the corresponding volumes return to using the respective allocated drives. 
+This can be done by using the [resume drives]({{< relref "/command-line/resume-drives.md" >}}) command. 
+
+```sh {.copy}
+kubectl directpv resume drives af3b8b4c-73b4-4a74-84b7-1ec30492a6f0
+```

@@ -97,15 +97,15 @@ In addition to these methods, DirectPV can use _drive labels_ to pick specific d
   EOF
   ```
 
-  ## Unique Drive selection
+## Unique Drive selection
 
-  The default free capacity based drive selection leads to allocating more than one volume in a single drive for StatefulSet deployments.
-  Such selection lacks performance and high availability for an application like MinIO object storage.
+The default free capacity based drive selection leads to allocating more than one volume in a single drive for StatefulSet deployments.
+Such selection lacks performance and high availability for an application like MinIO object storage.
 
-  To overcome this behavior, DirectPV provides a way to allocate one volume per drive. 
-  To use this feature, create a [custom storage class]({{< relref "/resource-management/schedule-by-label.md" >}}) with a label in a format such as `directpv.min.io/volume-claim-id`. 
+To overcome this behavior, DirectPV provides a way to allocate one volume per drive. 
+To use this feature, create a [custom storage class]({{< relref "/resource-management/schedule-by-label.md" >}}) with a label in a format such as `directpv.min.io/volume-claim-id`. 
   
-  Below is an example to create custom storage class using the [create-storage-class.sh script]({{< relref "/resource-management/scripts.md#create-storage-class.sh" >}}):
+Below is an example to create custom storage class using the [create-storage-class.sh script]({{< relref "/resource-management/scripts.md#create-storage-class.sh" >}}):
 
 ```sh {.copy}
 create-storage-class.sh tenant-1-storage 'directpv.min.io/volume-claim-id: 555e99eb-e255-4407-83e3-fc443bf20f86'

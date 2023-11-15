@@ -309,7 +309,7 @@ init "$@"
 main "$@"
 ```
 
-## Create Storage class
+## create-storage-class.sh
 
 Use the following script to create a new DirectPV storage class.
 
