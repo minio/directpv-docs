@@ -78,3 +78,28 @@ Remove stale volumes by running the [`clean`]({{< relref "/command-line/clean.md
 ```sh
 $ kubectl directpv clean --all
 ```
+
+## Suspend volumes
+
+{{< admonition title="Data Loss" type="caution" >}}
+THIS IS DANGEROUS OPERATION WHICH LEADS TO DATA LOSS.
+{{< /admonition >}}
+
+By Kubernetes design, a [StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) workload is active only if all of its pods are in running state. 
+A faulty volume prevents the StatefulSet from starting up. 
+
+DirectPV provides a workaround to suspend failed volumes by mounting them on an empty `/var/lib/directpv/tmp` directory with read-only access. 
+This can be done by executing the [suspend volumes]({{< relref "/command-line/suspend-volumes.md" >}}) command.
+
+```sh {.copy}
+kubectl directpv suspend volumes --nodes node-1 --drives dm-3
+```
+
+Suspended volumes can be resumed once they are fixed. 
+Upon resuming, the corresponding volumes return to using the respective allocated drives. 
+
+This can be done by using the [resume volumes]]({{< relref "/command-line/resume-volumes.md" >}}) command.
+
+```sh {.copy}
+kubectl directpv resume volumes --nodes node-1 --drives dm-3
+```

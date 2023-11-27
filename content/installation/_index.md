@@ -268,3 +268,11 @@ To install on a non-standard `kubelet` directory, set the `KUBELET_DIR_PATH` env
 export KUBELET_DIR_PATH=/path/to/my/kubelet/dir
 kubectl directpv install
 ```
+
+#### Install by Generating DirectPV Manifests
+
+To install using generated manifests file, use the following command.
+
+```sh {.copy}
+curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh - apply
+```

@@ -55,19 +55,21 @@ Follow the steps below to perform an in-place upgrade:
    ```
 
 
-## Upgrade from v3.2.2 or later to latest
+## Upgrade legacy DirectCSI driver
 
 For older versions, upgrade to v3.2.2 before upgrading to the latest version.
 
 In the latest version of DirectPV, the CSI sidecar images have been updated. 
 
-1. Uninstall the existing setup.
+1. If you are upgrading from 3.1.0 or later, uninstall the existing DirectCSI driver.
 
    Uninstalling DirectPV does not remove any resources.
 
    ```sh {.copy}
-   kubectl direct-csi uninstall
+   kubectl directcsi uninstall
    ```
+
+   If you are upgrading from an older version, you will do this step later in the process.
 
 2. Upgrade or install the latest version of the DirectPV plugin.
    
@@ -91,13 +93,21 @@ In the latest version of DirectPV, the CSI sidecar images have been updated.
    kubectl directpv install
    ```
 
-5. Check that the pods are running.
+   For more details on the installation process or custom installation methods, refer to the [nstallation documentation]({{< relref "/installation/_index.md" >}}).
+
+5. If you are upgrading from a version older that 3.1.0, uninstall the DirectCSI driver.
+
+   ```sh {.copy}
+   kubectl directcsi uninstall
+   ```
+
+6. Check that the pods are running.
    
    ```sh {.copy}
    kubectl get pods -n direct-csi-min-io -w
    ```
 
-6. Verify you can reach the DirectPV drives.
+7. Verify you can reach the DirectPV drives.
    
    ```sh {.copy}
    kubectl directpv drives ls
@@ -225,3 +235,13 @@ If you are on DirectCSI version < 3.2.2, first upgrade to v3.2.2, then upgrade t
    ```sh {.copy}
    kubectl direct-csi drives ls
    ```
+
+   ## Upgrade DirectPV Plugin
+
+   To upgrade the plugin using `krew`, use the following command.
+
+   ```sh {.copy}
+   kubectl krew upgrade directpv
+   ```
+
+   To upgrade from a binary, follow the [binary installation instructions]({{< relref "/installation/_index.md#install-directpv-plugin-as-a-binary" >}}).
