@@ -1,7 +1,8 @@
-baseURL = 'https://min.io/docs/directpv/'
+baseURL = ''
 languageCode = 'en-us'
 title = 'DirectPV Docs by MinIO'
 theme = 'kes-docs-theme'
+relativeURLs = "True"
 
 [params]
     footerText = 'This work is licensed under a Creative Commons Attribution 4.0 International License. 2020-Present, MinIO, Inc.'
