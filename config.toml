@@ -279,3 +279,16 @@ theme = 'kes-docs-theme'
         [menu.platform.params]
             activeFill = '#0076d2'
     
+     [[menu.docs]]
+        name = "MinIO DirectPV Documentation"
+        weight = 1
+        [menu.docs.params]
+            current = true
+     [[menu.docs]]
+        name = "MinIO Server Documentation"
+        url = "https://min.io/docs/minio/kubernetes/upstream/index.html"
+        weight = 2
+     [[menu.docs]]
+        name = "KES Documentation"
+        url = "https://min.io/docs/kes/"
+        weight = 3
