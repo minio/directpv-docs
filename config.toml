@@ -234,6 +234,10 @@ relativeURLs = "True"
         url = 'https://resources.min.io/l/library'
         weight = 5
     [[menu.main]]
+        name = 'Training'
+        url = 'https://min.io/training'
+        weight = 5.1
+    [[menu.main]]
         name = 'Partner'
         url = 'https://min.io/partner'
         weight = 6
@@ -279,4 +283,16 @@ relativeURLs = "True"
         weight = 5
         [menu.platform.params]
             activeFill = '#0076d2'
-    
+     [[menu.docs]]
+        name = "DirectPV Documentation"
+        weight = 1
+        [menu.docs.params]
+            current = true
+     [[menu.docs]]
+        name = "MinIO Documentation"
+        url = "https://min.io/docs/minio/kubernetes/upstream/index.html"
+        weight = 2
+     [[menu.docs]]
+        name = "KES Documentation"
+        url = "https://min.io/docs/kes"
+        weight = 3    
