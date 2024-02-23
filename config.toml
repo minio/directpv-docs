@@ -24,6 +24,7 @@ relativeURLs = "True"
         [menu.main.params]
             dropdown = true
             wide = true
+            cols = 3
         [[menu.main]]
             parent = 'Product'
             name = 'Multi-Cloud'
@@ -120,23 +121,7 @@ relativeURLs = "True"
         [[menu.main]]
             parent = 'Product'
             name = 'Others'
-            weight = 13
-            [[menu.main]]
-                parent = 'Others'
-                name = 'Hybrid Cloud Object Storage'
-                url = 'https://min.io/hybrid-cloud-storage'
-                pre = 'hybrid-cloud'
-                weight = 131
-                [[menu.main]]
-                    parent = 'Hybrid Cloud Object Storage'
-                    name = 'Overview'
-                    url = 'https://min.io/hybrid-cloud-storage#overview'
-                    weight = 1311
-                [[menu.main]]
-                    parent = 'Hybrid Cloud Object Storage'
-                    name = 'Architecture'
-                    url = 'https://min.io/hybrid-cloud-storage#architecture'
-                    weight = 1312
+            weight = 13               
             [[menu.main]]
                 parent = 'Others'
                 name = 'Baremetal'
@@ -148,68 +133,70 @@ relativeURLs = "True"
                     parent = 'Baremetal'
                     name = 'Overview'
                     url = 'https://min.io/product/overview#features'
-                    weight = 1321
+                    weight = 1311
                 [[menu.main]]
                     identifier = 'baremetal-architecture'
                     parent = 'Baremetal'
                     name = 'Architecture'
                     url = 'https://min.io/product/overview#architecture'
-                    weight = 1322
+                    weight = 1312
             [[menu.main]]
                 parent = 'Others'
                 name = 'Erasure Code Calculator'
                 url = 'https://min.io/product/erasure-code-calculator'
                 pre = 'ecc'
-                weight = 133
+                weight = 132
             [[menu.main]]
                 parent = 'Others'
                 name = 'Reference Hardware'
                 url = 'https://min.io/product/reference-hardware'
                 pre = 'ref-hardware'
-                weight = 134
+                weight = 133
     [[menu.main]]
         name = 'Solutions'
         pre = ''
         weight = 2
         [menu.main.params]
             dropdown = true
+            wide = true
+            cols = 4
     [[menu.main]]
             parent = 'Solutions'
-            name = 'Integrations'
-            pre = 'Browse our vast portfolio of integrations'
-            url = 'https://min.io/product/integrations'
+            name = 'AI Storage'
+            pre = 'Object storage is powering the AI revolution. Learn how MinIO is leading the AI storage market through performance at scale.'
+            url = 'https://min.io/solutions/object-storage-for-ai'
             weight = 21
     [[menu.main]]
             parent = 'Solutions'
-            name = 'SQL Server'
-            pre = 'Discover how to pair SQL Server 2022 with MinIO to run queries on your data on any cloud - without having to move it.'
-            url = 'https://min.io/solutions/sqlserver'
+            name = 'Modern Datalakes'
+            pre = 'Modern, multi-engine datalakes depend on object stores that deliver performance at scale. Learn more about this core MinIO use case.'
+            url = 'https://min.io/solutions/modern-data-lakes-lakehouses'
             weight = 22
     [[menu.main]]
             parent = 'Solutions'
-            name = 'Commvault'
-            pre = 'Learn how Commvault and MinIO are partnered to deliver performance at scale for mission critical backup and restore workloads.'
-            url = 'https://min.io/solutions/commvault'
+            name = 'Hybrid Cloud'
+            pre = 'Effective multi-cloud storage strategies rely on utilizing architecture and tools that can function seamlessly across diverse environments.'
+            url = 'https://min.io/hybrid-multi-cloud-storage'
             weight = 23
-    [[menu.main]]
-            parent = 'Solutions'
-            name = 'Snowflake'
-            pre = 'Query and analyze multiple data sources, including streaming data, residing on MinIO with the Snowflake Data Cloud. No need to move the data, just query using SnowSQL.'
-            url = 'https://min.io/solutions/snowflake'
-            weight = 24
     [[menu.main]]
             parent = 'Solutions'
             name = 'Splunk'
             pre = 'Find out how MinIO is delivering performance at scale for Splunk SmartStores.'
             url = 'https://min.io/solutions/optimize-splunk-smartstore-performance'
+            weight = 24
+    [[menu.main]]
+            parent = 'Solutions'
+            name = 'Snowflake'
+            pre = 'Query and analyze multiple data sources, including streaming data, residing on MinIO with the Snowflake Data Cloud. No need to move the data, just query using SnowSQL.'
+            url = 'https://min.io/solutions/snowflake'
             weight = 25
     [[menu.main]]
             parent = 'Solutions'
-            name = 'Veeam'
-            pre = 'Learn how MinIO and Veeam have partnered to drive performance and scalability for a variety of backup use cases.'
-            url = 'https://min.io/solutions/veeam'
+            name = 'SQL Server'
+            pre = 'Discover how to pair SQL Server 2022 with MinIO to run queries on your data on any cloud - without having to move it.'
+            url = 'https://min.io/solutions/sqlserver'
             weight = 26
-    [[menu.main]]
+     [[menu.main]]
             parent = 'Solutions'
             name = 'HDFS Migration'
             pre = 'Modernize and simplify your big data storage infrastructure with high-performance, Kubernetes-native object storage from MinIO.'
@@ -222,6 +209,24 @@ relativeURLs = "True"
             url = 'https://min.io/solutions/vmware'
             weight = 28
     [[menu.main]]
+            parent = 'Solutions'
+            name = 'Veeam'
+            pre = 'Learn how MinIO and Veeam have partnered to drive performance and scalability for a variety of backup use cases.'
+            url = 'https://min.io/solutions/veeam'
+            weight = 29
+    [[menu.main]]
+            parent = 'Solutions'
+            name = 'Commvault'
+            pre = 'Learn how Commvault and MinIO are partnered to deliver performance at scale for mission critical backup and restore workloads.'
+            url = 'https://min.io/solutions/commvault'
+            weight = 30
+    [[menu.main]]
+            parent = 'Solutions'
+            name = 'Integrations'
+            pre = 'Browse our vast portfolio of integrations.'
+            url = 'https://min.io/product/integrations'
+            weight = 31
+    [[menu.main]]
         name = 'Docs'
         url = 'https://min.io/docs/minio/kubernetes/upstream'
         weight = 3
@@ -233,7 +238,7 @@ relativeURLs = "True"
         name = 'Resources'
         url = 'https://resources.min.io/l/library'
         weight = 5
-    [[menu.main]]
+     [[menu.main]]
         name = 'Training'
         url = 'https://min.io/training'
         weight = 5.1
