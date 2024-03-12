@@ -298,6 +298,10 @@ relativeURLs = "True"
         url = "https://min.io/docs/minio/kubernetes/upstream/index.html"
         weight = 2
      [[menu.docs]]
+        name = "MinIO Enterprise Object Store Documentation"
+        url = "https://min.io/docs/enterprise"
+        weight = 3
+     [[menu.docs]]
         name = "KES Documentation"
         url = "https://min.io/docs/kes"
-        weight = 3    
+        weight = 4    
