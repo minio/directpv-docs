@@ -32,33 +32,33 @@ Such additional layers of disaggregation result in increased complexity and poor
 
 ## Installation and Upgrades
 
- - [Install DirectPV]({{< relref "/content/installation/_index.md" >}})
- - [Upgrade DirectPV]({{< relref "/content/installation/upgrade.md" >}})
+ - [Install DirectPV]({{< relref "/installation/_index.md" >}})
+ - [Upgrade DirectPV]({{< relref "/installation/upgrade.md" >}})
 
 ## Concepts
 
-- [Architecture]({{< relref "/content/concepts/architecture.md" >}})
-- [Metrics and Monitoring]({{< relref "/content/concepts/metrics.md" >}})
-- [DirectPV Specification]({{< relref "/content/concepts/specification.md" >}}) 
+- [Architecture]({{< relref "concepts/architecture.md" >}})
+- [Metrics and Monitoring]({{< relref "concepts/metrics.md" >}})
+- [DirectPV Specification]({{< relref "concepts/specification.md" >}}) 
 
 ## Managing Resources
 
-- [Resource Types]({{< relref "/content/resource-management/_index.md" >}})
-- [Drives]({{< relref "/content/resource-management/drives.md" >}})
-- [Nodes]({{< relref "/content/resource-management/nodes.md" >}})
-- [Volumes]({{< relref "/content/resource-management/volumes.md" >}})
-- [Schedule volumes by labels]({{< relref "/content/resource-management/schedule-by-label.md" >}})
-- [Schedule volumes]({{< relref "/content/resource-management/scheduling.md" >}})
-- [Useful Scripts]({{< relref "/content/resource-management/scripts.md" >}})
+- [Resource Types]({{< relref "resource-management/_index.md" >}})
+- [Drives]({{< relref "resource-management/drives.md" >}})
+- [Nodes]({{< relref "resource-management/nodes.md" >}})
+- [Volumes]({{< relref "resource-management/volumes.md" >}})
+- [Schedule volumes by labels]({{< relref "resource-management/schedule-by-label.md" >}})
+- [Schedule volumes]({{< relref "resource-management/scheduling.md" >}})
+- [Useful Scripts]({{< relref "resource-management/scripts.md" >}})
  
 ## Frequently Asked Questions
 
-- [Frequently Asked Questions]({{< relref "/content/support/_index.md" >}})
-- [Troubleshooting]({{< relref "/content/support/troubleshooting.md" >}})
+- [Frequently Asked Questions]({{< relref "support/_index.md" >}})
+- [Troubleshooting]({{< relref "support/troubleshooting.md" >}})
 
 ## Command Line Interface (CLI)
 
- - [CLI reference]({{< relref "content/command-line/_index.md" >}})
+ - [CLI reference]({{< relref "command-line/_index.md" >}})
 
 <!--- 
  - [Usage Guide](./usage-guide.md)
