@@ -67,7 +67,7 @@ The available commands include:
 | [`label volumes`](label-volumes.md)     | Set labels to volumes                                             |
 | [`list-drives`](list-drives.md)         | List drives                                                       |
 | [`list-volumes`](list-volumes.md)       | List volumes                                                      |
-| [`repair`](repair.md)                   | Repair drives                                                     |
+| [`repair`](repair.md)                   | Repair faulty XFS-formatted drives                                |
 | [`resume-drives`](resume-drives.md)     | Resume suspended drives                                           |
 | [`resume-volumes`](resume-volumes.md)   | Resume suspended volumes                                          |
 | [`suspend-drives`](suspend-drives.md)   | Suspend drives                                                    |
