@@ -161,6 +161,24 @@ $ kubectl directpv remove --drives=vdb --nodes=node1
 
 Refer to the [remove command]({{< relref "command-line/remove.md" >}}) for more information.
 
+## Repair Drives
+
+{{< admonition title="Data Loss" type="caution" >}}
+THIS IS DANGEROUS OPERATION WHICH LEADS TO DATA LOSS.
+{{< /admonition >}}
+
+DirectPV supports using the `xfs_repair` utility to attempt to repair managed drives that report XFS filesystem errors, faults, or corruption.
+This command has no guarantee of success or complete recovery.
+
+The `repair` command creates one-time Kubernetes `Job` with the pod name as `repair-<DRIVE-ID>`.
+Kubernetes automatically removes this job five minutes after completion.
+
+Progress and status of the drive repair can be viewed using `kubectl log` command. 
+
+Before beginning a repair, you must first [suspend the drive](#suspend-drives).
+
+Use the [repair.sh]({{< relref "/resource-management/scripts.md#repair.sh" >}}) script to repair a faulty drive. 
+
 
 ## Suspend drives
 
