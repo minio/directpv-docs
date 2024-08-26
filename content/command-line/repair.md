@@ -12,7 +12,8 @@ tableOfContents: true
 This command completely and irreversibly erases any data that may exist on the selected drive(s).
 {{< /admonition >}}
 
-In a rare situation, the filesystem on a faulty XFS-formatted drive can be repaired to make them usable. 
+DirectPV supports using the `xfs_repair` utility to attempt to repair managed drives that report XFS filesystem errors, faults, or corruption.
+This command has no guarantee of success or complete recovery.
 
 The `repair` command creates one-time Kubernetes `Job` with the pod name as `repair-<DRIVE-ID>`.
 Kubernetes automatically removes this job five minutes after completion.

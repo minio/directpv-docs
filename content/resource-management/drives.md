@@ -167,7 +167,8 @@ Refer to the [remove command]({{< relref "command-line/remove.md" >}}) for more 
 THIS IS DANGEROUS OPERATION WHICH LEADS TO DATA LOSS.
 {{< /admonition >}}
 
-In a rare situation, filesystem on a faulty XFS-formatted drive can be repaired to make it usable. 
+DirectPV supports using the `xfs_repair` utility to attempt to repair managed drives that report XFS filesystem errors, faults, or corruption.
+This command has no guarantee of success or complete recovery.
 
 The `repair` command creates one-time Kubernetes `Job` with the pod name as `repair-<DRIVE-ID>`.
 Kubernetes automatically removes this job five minutes after completion.
