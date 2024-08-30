@@ -11,6 +11,16 @@ Custom installations do not support client-side upgrade functionality.
 Use [`kubectl directpv migrate`]({{< relref "/command-line/migrate.md" >}}) to migrate the old resources to a new installation.
 {{< /admonition >}}
 
+{{< admonition title="Pod Security Policies" type="note" >}}
+The `PodSecurityPolicy` feature was deprecated in Kubernetes v1.21 and removed in v1.25.
+The oldest supported release of Kubernetes is v1.28.
+The [Kubernetes Documentation](https://kubernetes.io/docs/concepts/security/pod-security-policy/) recommends [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) as a replacement.
+
+DirectPV continues to support `PodSecurityPolicy` in the 4.0.x lineage.
+The latest version of DirectPV, 4.1.x and later, removed support for `PodSecurityPolicy`.
+
+If you rely on `PodSecurityPolicy`, you **must** remain on the 4.0.x lineage of DirectPV and **must not** upgrade to a 4.1.x release or later.
+{{< /admonition >}}
 
 ## Upgrade DirectPV CSI Driver from 4.x.x to latest
 
@@ -51,9 +61,30 @@ Follow the steps below to perform an in-place upgrade:
 2. Run the install script with the appropriate node-selector, tolerations, and `KUBELET_DIR_PATH` environment variables needed for your environment.
 
    ```sh {.copy}
-   curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh - apply
+   curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh -s - apply
    ```
 
+#### Retain PodSecurityPolicy support
+
+If you upgrade to 4.1.x and wish to retain support for `PodSecurityPolicy`, complete the following steps.
+
+**Before starting the upgrade**
+
+Make a backup of the existing `psp` and `clusterrolebinding` YAML specifications.
+
+```sh {.copy}
+kubectl get psp directpv-min-io -o yaml > psp.yaml
+kubectl get clusterrolebinding psp-directpv-min-io -o yaml > psp-crb.yaml
+```
+
+**Apply the backup YAML**
+
+After completing the other upgrade steps, apply the `psp` and `clusterrolebinding` YAML backups.
+
+```sh {.copy}
+kubectl apply -f psp.yaml
+kubectl apply -f psp-crb.yaml
+```
 
 ## Upgrade legacy DirectCSI driver
 

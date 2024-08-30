@@ -274,5 +274,5 @@ kubectl directpv install
 To install using generated manifests file, use the following command.
 
 ```sh {.copy}
-curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh - apply
+curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh -s - apply
 ```
