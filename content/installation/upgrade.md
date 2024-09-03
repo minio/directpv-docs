@@ -12,14 +12,11 @@ Use [`kubectl directpv migrate`]({{< relref "/command-line/migrate.md" >}}) to m
 {{< /admonition >}}
 
 {{< admonition title="Pod Security Policies" type="note" >}}
-The `PodSecurityPolicy` feature was deprecated in Kubernetes v1.21 and removed in v1.25.
-The oldest supported release of Kubernetes is v1.28.
-The [Kubernetes Documentation](https://kubernetes.io/docs/concepts/security/pod-security-policy/) recommends [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) as a replacement.
+Kubernetes deprecated the `PodSecurityPolicy` feature in v1.21, then removed it entirely in v1.25.
+The Kubernetes documentation [recommends]](https://kubernetes.io/docs/concepts/security/pod-security-policy/) [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) as a replacement.
 
 DirectPV continues to support `PodSecurityPolicy` in the 4.0.x lineage.
 The latest version of DirectPV, 4.1.x and later, removed support for `PodSecurityPolicy`.
-
-If you rely on `PodSecurityPolicy`, you **must** remain on the 4.0.x lineage of DirectPV and **must not** upgrade to a 4.1.x release or later.
 {{< /admonition >}}
 
 ## Upgrade DirectPV CSI Driver from 4.x.x to latest
@@ -45,7 +42,7 @@ Follow the steps below to perform an offline upgrade:
 
 3. [Install the latest DirectPV CSI driver]({{< relref "/installation/_index.md#driver-installation" >}}).
 
-#### In-place upgrade
+### In-place upgrade
 
 Follow the steps below to perform an in-place upgrade:
 
@@ -64,11 +61,11 @@ Follow the steps below to perform an in-place upgrade:
    curl -sfL https://github.com/minio/directpv/raw/master/docs/tools/install.sh | sh -s - apply
    ```
 
-#### Retain PodSecurityPolicy support
+### Retain PodSecurityPolicy support
 
 If you upgrade to 4.1.x and wish to retain support for `PodSecurityPolicy`, complete the following steps.
 
-**Before starting the upgrade**
+#### Before starting the upgrade
 
 Make a backup of the existing `psp` and `clusterrolebinding` YAML specifications.
 
@@ -77,7 +74,7 @@ kubectl get psp directpv-min-io -o yaml > psp.yaml
 kubectl get clusterrolebinding psp-directpv-min-io -o yaml > psp-crb.yaml
 ```
 
-**Apply the backup YAML**
+#### Apply the backup YAML
 
 After completing the other upgrade steps, apply the `psp` and `clusterrolebinding` YAML backups.
 
