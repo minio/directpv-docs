@@ -13,10 +13,10 @@ Use [`kubectl directpv migrate`]({{< relref "/command-line/migrate.md" >}}) to m
 
 {{< admonition title="Pod Security Policies" type="note" >}}
 Kubernetes deprecated the `PodSecurityPolicy` feature in v1.21, then removed it entirely in v1.25.
-The Kubernetes documentation [recommends](https://kubernetes.io/docs/concepts/security/pod-security-policy/) [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) as a replacement.
+Use [Pod Security Admission](https://kubernetes.io/docs/concepts/security/pod-security-admission/) as a replacement, as recommended in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/security/pod-security-policy/).
 
-DirectPV continues to support `PodSecurityPolicy` in the 4.0.x lineage.
-The latest version of DirectPV, 4.1.x and later, removed support for `PodSecurityPolicy`.
+DirectPV continues to support `PodSecurityPolicy` in the 4.0.x versions.
+DirectPV 4.1.x and later removed support for `PodSecurityPolicy`.
 {{< /admonition >}}
 
 ## Upgrade DirectPV CSI Driver from 4.x.x to latest
