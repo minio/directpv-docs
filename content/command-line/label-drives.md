@@ -37,11 +37,11 @@ These aliases have the same results and use the same flags as `label drives`.
 
 ### Flags
 
-| **Flag**              | **Description**                                                                                  |
-|-----------------------|--------------------------------------------------------------------------------------------------|
-| `--ids` \<string\>    | Select by drive ID                                                                               |
-| `--labels` \<string\> | Select by drive labels; supports comma separated key=value pairs, such as `tier=hot,region=east` |
-| `--status` \<string\> | Select drives by status. Valid statuses include `error`, `lost`, `moving`, `ready`, or `removed` |
+| **Flag**              | **Description**                                                                                    |
+|-----------------------|----------------------------------------------------------------------------------------------------|
+| `--ids` \<string\>    | Select by drive ID                                                                                 |
+| `--labels` \<string\> | Select by drive labels; supports comma separated `key=value` pairs, such as `tier=hot,region=east` |
+| `--status` \<string\> | Select drives by status. Valid statuses include `error`, `lost`, `moving`, `ready`, or `removed`   |
 
 ### Global Flags
 
