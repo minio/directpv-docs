@@ -34,7 +34,7 @@ These aliases have the same results and use the same flags as `list volumes`.
 | `--pod-namespaces` \<string\>  | Filter output by pod namespaces; supports ellipses pattern such as `tenant-{0...3}`              |
 | `--pvc`                        | Add Persistent Volume Claim (PVC) names in the output                                            |
 | `--status` \<string\>          | Filter output by volume status. Valid statuses are `pending` or `ready`.                         |
-| `--show-labels`                | Show all labels as the last column                                                               |
+| `--show-labels`                | Show all custom labels as the last column                                                        |
 | `--labels` \<string\>          | Filter output by volume labels. Enter labels as key-value pairs, such as, `tier=hot,region=east` |
 | `--all`                        | List all volumes                                                                                 |
 
@@ -122,7 +122,7 @@ kubectl directpv list volumes --drive-id=b84758b0-866f-4a12-9d00-d8f7da76ceb3
 
 ### List volumes with labels
 
-The following command lists all volumes and includes a column to show the labels assigned to each volume, if any.
+The following command lists all volumes and includes a column to show the custom labels assigned to each volume, if any.
 
 ```sh {.copy}
 kubectl directpv list volumes --show-labels
