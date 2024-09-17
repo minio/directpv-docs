@@ -17,8 +17,12 @@ directpv label drives key=value|key- [flags]
 ```
 
 Use only one or the other of the options:
-- Use `key=value` to add a label `key` with the value of `value` to the drive(s).
-- Use `key-` to remove the label `key` from the drive(s).
+- Use `key=value` to add a custom label `key` with the value of `value` to the drive(s).
+- Use `key-` to remove the custom label `key` from the drive(s).
+  
+  Only *custom* labels can be removed.
+  Default labels used by DirectPV cannot be removed from the drive.
+
 
 ### Aliases
 
@@ -33,11 +37,11 @@ These aliases have the same results and use the same flags as `label drives`.
 
 ### Flags
 
-| **Flag**              | **Description**                                                                                  |
-|-----------------------|--------------------------------------------------------------------------------------------------|
-| `--ids` \<string\>    | Select by drive ID                                                                               |
-| `--labels` \<string\> | Select by drive labels; supports comma separated key=value pairs, such as `tier=hot,region=east` |
-| `--status` \<string\> | Select drives by status. Valid statuses include `error`, `lost`, `moving`, `ready`, or `removed` |
+| **Flag**              | **Description**                                                                                    |
+|-----------------------|----------------------------------------------------------------------------------------------------|
+| `--ids` \<string\>    | Select by drive ID                                                                                 |
+| `--labels` \<string\> | Select by drive labels; supports comma separated `key=value` pairs, such as `tier=hot,region=east` |
+| `--status` \<string\> | Select drives by status. Valid statuses include `error`, `lost`, `moving`, `ready`, or `removed`   |
 
 ### Global Flags
 
@@ -79,3 +83,6 @@ The command removes the label no matter what the value of `tier` may be on each 
 ```sh {.copy}
 kubectl directpv label drives tier- --all
 ```
+
+You can only remove custom labels.
+Default DirectPV labels cannot be removed.

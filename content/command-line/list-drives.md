@@ -29,12 +29,12 @@ These aliases have the same results and use the same flags as `list drives`.
 
 ### Flags
 
-| **Flag**              | **Description**                                                                                        |
-|-----------------------|--------------------------------------------------------------------------------------------------------|
-| `--all`               | List all drives                                                                                        |
-| `--labels` \<string\> | Filter output by drive labels. Supports comma-separated key=value pairs such as `tier=hot,region=east` |
-| `--show-labels`       | Show all labels as the last column of the output (default hide labels column)                          |
-| `--status` \<string\> | Filter output by drive status. Valid statuses are `error`, `lost`, `moving`, `ready`, or `removed`     |
+| **Flag**              | **Description**                                                                                          |
+|-----------------------|----------------------------------------------------------------------------------------------------------|
+| `--all`               | List all drives                                                                                          |
+| `--labels` \<string\> | Filter output by drive labels. Supports comma-separated `key=value` pairs such as `tier=hot,region=east` |
+| `--show-labels`       | Show all custom labels as the last column of the output (default hide labels column)                     |
+| `--status` \<string\> | Filter output by drive status. Valid statuses are `error`, `lost`, `moving`, `ready`, or `removed`       |
 
 ### Global Flags
 
@@ -101,7 +101,7 @@ kubectl directpv list drives --output wide
 
 ### List drives with labels
 
-The following lists drives and includes a column that shows drive labels.
+The following lists drives and includes a column that shows custom drive labels.
 
 ```sh {.copy}
 kubectl directpv list drives --show-labels
