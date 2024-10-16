@@ -17,8 +17,8 @@ The community Slack does not come with any SLA, agreements, or guarantees for re
 
 ## Frequently Asked Questions
 
-Answers to common asked questions can be found in [FAQs](faqs.md).
+Answers to common asked questions can be found in [FAQs]({{< relref "/support/faqs.md" >}}).
 
 ## Troubleshooting
 
-Solutions to common DirectPV issues can be found in [troubleshooting](troubleshooting.md).
+Solutions to common DirectPV issues can be found in [troubleshooting]({{< relref "/support/troubleshooting.md" >}}).
