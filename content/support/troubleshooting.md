@@ -8,7 +8,7 @@ weight: 200
 ---
 
 ## DirectPV installation fails in my Kubernetes. Why?
-You need to have necessary privileges and permissions to perform installation. Go though the [specifications documentation](./specifications.md). For Red Hat OpenShift, refer to the [OpenShift specific documentation](./openshift.md). 
+You need to have necessary privileges and permissions to perform installation. Go though the [specifications documentation]({{< relref "/concepts/specification.md" >}}). For Red Hat OpenShift, refer to the [OpenShift specific documentation]({{< relref "/installation/openshift.md" >}}). 
 
 ## After upgrading DirectPV to v4.x.x, I do not find `direct-csi-min-io` storage class. Why?
 Legacy DirectCSI is deprecated including storage class `direct-csi-min-io` and it is no longer supported. Previously created volumes continue to work normally. For new volume requests, use the `directpv-min-io` storage class.
@@ -17,7 +17,7 @@ Legacy DirectCSI is deprecated including storage class `direct-csi-min-io` and i
 
 Installing DirectPV also tries to upgrade legacy DirectCSI. 
 Upgrading DirectCSI older than v3.1.0 requires _Conversion webhook_ service running. 
-For appropriate upgrade process, refer [the upgrade documentation](./installation/upgrade.md).
+For appropriate upgrade process, refer [the upgrade documentation]({{< relref "/installation/upgrade.md" >}}).
 
 ## In the YAML output of `discover` command, I do not find my storage drive(s). Why?
 DirectPV ignores drives that meet any of the below conditions:
