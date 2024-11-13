@@ -1,7 +1,6 @@
 ---
 title: OpenShift
 date: 2023-01-07
-lastmod: :git
 draft: false
 tableOfContents: true
 ---

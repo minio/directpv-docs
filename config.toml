@@ -255,40 +255,7 @@ enableGitInfo = true
         name = 'Download'
         url = 'https://min.io/download'
         weight = 8
-    # Platform
-    [[menu.platform]]
-        name = 'Kubernetes'
-        url = 'https://min.io/docs/minio/kubernetes/upstream/index.html'
-        pre = 'k8s'
-        weight = 1
-        [menu.platform.params]
-            activeFill = '#1a6fd3'
-    [[menu.platform]]
-        name = 'Docker'
-        url = 'https://min.io/docs/minio/container/index.html'
-        pre = 'docker'
-        weight = 2
-        [menu.platform.params]
-            activeFill = '#2497ed'
-     [[menu.platform]]
-        name = 'Linux'
-        url = 'https://min.io/docs/minio/linux/index.html'
-        pre = 'linux'
-        weight = 3
-     [[menu.platform]]
-        name = 'macOS'
-        url = 'https://min.io/docs/minio/macos/index.html'
-        pre = 'macos'
-        weight = 4
-        [menu.platform.params]
-            activeFill = '#959595'
-     [[menu.platform]]
-        name = 'windows'
-        url = 'https://min.io/docs/minio/windows/index.html'
-        pre = 'windows'
-        weight = 5
-        [menu.platform.params]
-            activeFill = '#0076d2'
+ 
      [[menu.docs]]
         name = "DirectPV Documentation"
         weight = 1
