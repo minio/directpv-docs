@@ -151,4 +151,4 @@ sudo pvremove /dev/loop<n> /dev/loop<n> /dev/loop<n> /dev/loop<n> # n can be rep
 sudo losetup --detach-all
 ```
 
-Please refer [here](./troubleshooting.md) for any trouble shooting guidelines.
+Please refer [here](./troubleshooting) for any trouble shooting guidelines.

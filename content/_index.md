@@ -61,11 +61,11 @@ Such additional layers of disaggregation result in increased complexity and poor
  - [CLI reference]({{< relref "command-line/_index.md" >}})
 
 <!--- 
- - [Usage Guide](./usage-guide.md)
- - [Upgrades](./cli/upgrades.md) 
+ - [Usage Guide](./usage-guide)
+ - [Upgrades](./cli/upgrades) 
  
 ### Advanced
- - [Internals](./internals.md)
+ - [Internals](./internals)
 -->
 
 ## External References
