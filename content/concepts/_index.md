@@ -10,6 +10,6 @@ weight: 20
 
 DirectPV Concepts
 
-- [Architecture](architecture.md)
-- [Metrics](metrics.md)
-- [Driver Specification](specification.md)
+- [Architecture](architecture)
+- [Metrics](metrics)
+- [Driver Specification](specification)

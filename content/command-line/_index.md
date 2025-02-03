@@ -58,30 +58,30 @@ The available commands include:
 | **Command**                             | **Description**                                                   |
 |-----------------------------------------|-------------------------------------------------------------------|
 | *Install*                               |                                                                   |
-| [`install`](install.md)                 | Install DirectPV in Kubernetes                                    |
+| [`install`](install)                 | Install DirectPV in Kubernetes                                    |
 | *Manage Drives and Volumes*             |                                                                   |
-| [`discover`](discover.md)               | Discover new drives                                               |
-| [`info`](info.md)                       | Show information about DirectPV installation                      |
-| [`init`](init.md)                       | Initialize drives                                                 |
-| [`label drives`](label-drives.md)       | Set labels to drives                                              |
-| [`label volumes`](label-volumes.md)     | Set labels to volumes                                             |
-| [`list-drives`](list-drives.md)         | List drives                                                       |
-| [`list-volumes`](list-volumes.md)       | List volumes                                                      |
-| [`repair`](repair.md)                   | Repair faulty XFS-formatted drives                                |
-| [`resume-drives`](resume-drives.md)     | Resume suspended drives                                           |
-| [`resume-volumes`](resume-volumes.md)   | Resume suspended volumes                                          |
-| [`suspend-drives`](suspend-drives.md)   | Suspend drives                                                    |
-| [`suspend-volumes`](suspend-volumes.md) | Suspend volumes                                                   |
+| [`discover`](discover)               | Discover new drives                                               |
+| [`info`](info)                       | Show information about DirectPV installation                      |
+| [`init`](init)                       | Initialize drives                                                 |
+| [`label drives`](label-drives)       | Set labels to drives                                              |
+| [`label volumes`](label-volumes)     | Set labels to volumes                                             |
+| [`list-drives`](list-drives)         | List drives                                                       |
+| [`list-volumes`](list-volumes)       | List volumes                                                      |
+| [`repair`](repair)                   | Repair faulty XFS-formatted drives                                |
+| [`resume-drives`](resume-drives)     | Resume suspended drives                                           |
+| [`resume-volumes`](resume-volumes)   | Resume suspended volumes                                          |
+| [`suspend-drives`](suspend-drives)   | Suspend drives                                                    |
+| [`suspend-volumes`](suspend-volumes) | Suspend volumes                                                   |
 | *Manage Scheduling*                     |                                                                   |
-| [`cordon`](cordon.md)                   | Mark drives as unschedulable                                      |
-| [`uncordon`](uncordon.md)               | Mark drives as schedulable                                        |
+| [`cordon`](cordon)                   | Mark drives as unschedulable                                      |
+| [`uncordon`](uncordon)               | Mark drives as schedulable                                        |
 | *Maintenance*                           |                                                                   |
-| [`clean`](clean.md)                     | Cleanup stale volumes                                             |
-| [`migrate`](migrate.md)                 | Migrate drives and volumes from legacy DirectCSI                  |
-| [`move`](move.md)                       | Move volumes excluding data from source drive to destination drive on a same node |
-| [`remove`](remove.md)                   | Remove unused drives from DirectPV                                |
+| [`clean`](clean)                     | Cleanup stale volumes                                             |
+| [`migrate`](migrate)                 | Migrate drives and volumes from legacy DirectCSI                  |
+| [`move`](move)                       | Move volumes excluding data from source drive to destination drive on a same node |
+| [`remove`](remove)                   | Remove unused drives from DirectPV                                |
 | *Uninstall DirectPV*                    |                                                                   |
-| [`uninstall`](uninstall.md)             | Uninstall DirectPV in Kubernetes                                  |
+| [`uninstall`](uninstall)             | Uninstall DirectPV in Kubernetes                                  |
 
 ## Command History
 
@@ -89,7 +89,7 @@ The available commands include:
 
 | Old DirectPV Command        | Replacement DirectPV Command       |
 |:----------------------------|:-----------------------------------|
-| `kubectl directpv discover` | [`kubectl directpv init`](init.md) |
+| `kubectl directpv discover` | [`kubectl directpv init`](init) |
 
 ### Command changes from DirectCSI
 

@@ -79,7 +79,7 @@ In addition to these methods, DirectPV can use _drive labels_ to pick specific d
   create-storage-class.sh fast-tier-storage 'directpv.min.io/tier: fast'
   ```
 
-* Use the newly created storage class in [volume provisioning](./volume-provisioning.md). 
+* Use the newly created storage class in [volume provisioning](./volume-provisioning). 
  
   ```sh
   $ kubectl apply -f - <<EOF

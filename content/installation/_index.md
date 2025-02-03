@@ -125,7 +125,7 @@ You can provision DirectPV volumes by using this storage class as the `storageCl
 
 For an example of using `directpv-min-io`, see the [MinIO example on GitHub](https://github.com/minio/directpv/blob/master/functests/minio.yaml#L62).
 
-<!-- - view the [usage guide](./usage-guide.md) -->
+<!-- - view the [usage guide](/usage-guide) -->
 
 Refer to the [CLI Guide]({{< relref "command-line/_index.md" >}}) for more helpers on the following commands.
 
