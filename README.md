@@ -37,7 +37,7 @@ The DirectPV docs use [Hugo](https://www.gohogo.io) to generate static HTML page
    git submodule update --init --recursive
    ```
 
-4. `cd themes/kes-doc-theme`
+4. `cd themes/kes-docs-theme`
 5. `npm install`
 6. `npm run build`
 7. `cd ../../`
@@ -52,7 +52,7 @@ To pull new updates to the theme from the upstream repository, run the following
 
 ```
 git submodule update --recursive --remote
-cd themes/hugo-docs-theme
+cd themes/kes-docs-theme
 npm install
 npm run build
 cd ../../
