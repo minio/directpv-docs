@@ -1,5 +1,5 @@
 ---
-title: Scripts
+title: DirectPV Resource Management Scripts
 date: 2023-07-07
 lastmod: :git
 draft: false
@@ -418,6 +418,9 @@ main "$@"
 
 ## Repair faulty drives
 
+Use this script to repair nonfunctioning drives.
+
+```bash
 #!/usr/bin/env bash
 #
 # This file is part of MinIO DirectPV
@@ -560,3 +563,4 @@ function main() {
 
 init "$@"
 main "$@"
+```
