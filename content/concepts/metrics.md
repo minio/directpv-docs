@@ -43,10 +43,41 @@ To scrape data in Prometheus, each node must be accessible by port `10443`.
 
 DirectPV node server exports the following metrics:
 
-- directpv_stats_bytes_used
-- directpv_stats_bytes_total
+- `directpv_stats_bytes_used`
 
-These metrics are categorized by labels ['tenant', 'volumeID', 'node'] and represent the volume stats of the published volumes.
+  Total number of bytes used by the volume
+
+- `directpv_stats_bytes_total`
+
+  Total number of bytes allocated to the volume
+
+The following additional metrics are available in release 4.0.17 or later.
+
+- `directpv_stats_drive_ready`
+  
+  Provides the drive status, either online or offline
+
+- `directpv_stats_drive_total_read_bytes`
+
+  Total number of bytes read from the drive
+
+- `directpv_stats_drive_total_write_bytes`
+
+  Total number of bytes written to the drive
+
+- `directpv_stats_drive_read_latency_seconds`
+
+  Drive read latency, in seconds
+
+- `directpv_stats_drive_write_latency_seconds`
+
+  Drive write latency, in seconds
+
+- `directpv_stats_drive_wait_time_seconds`
+
+  Drive Wait Time, in seconds
+
+These metrics are categorized by labels [`drive`, `tenant`, `volumeID`, `node`] and represent the volume stats of the published volumes.
 
 ## Configuration
 

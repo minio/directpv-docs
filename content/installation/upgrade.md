@@ -19,6 +19,17 @@ DirectPV continues to support `PodSecurityPolicy` in the 4.0.x versions.
 DirectPV 4.1.x and later removed support for `PodSecurityPolicy`.
 {{< /admonition >}}
 
+## Version support
+
+Version **4.1.x** is the latest lineage of open source DirectPV CSI Driver.
+Most users should install or upgrade to the latest release in this lineage.
+However, if you require continued use of the deprecated `PodSecurityPolicy` feature, be sure to follow the upgrade guide carefully.
+
+Version **4.0.x** lineage entered maintenance mode on January 1, 2025.
+There is no future development of this lineage expected, though it may continue to receive bug fix and security releases from time to time.
+
+Versions older than 4.0.0 are no longer supported.
+
 ## Upgrade DirectPV CSI Driver from 4.x.x to latest
 
 ### Offline upgrade
