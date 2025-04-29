@@ -33,8 +33,8 @@ However, if you require continued use of the deprecated `PodSecurityPolicy` feat
 
 The **4.0.x** series entered maintenance mode on January 1, 2025.
 
-There is no future development of this series expected.
-Releases in this series may appear from time to time to address bugs or security concerns.
+Maintenance may include limited bug or security resolution.
+Users should plan to migrate to the 4.1.x series at the earliest opportunity.
 
 ### Earlier releases
 
