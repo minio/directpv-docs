@@ -51,7 +51,7 @@ DirectPV node server exports the following metrics:
 
   Total number of bytes allocated to the volume
 
-The following additional metrics are available in release 4.0.17 or later.
+The following additional metrics are available in release 4.0.17 or 4.1.5 and later releases.
 
 - `directpv_stats_drive_ready`
   
