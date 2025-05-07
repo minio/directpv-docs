@@ -148,7 +148,7 @@ Below is an example:
 
 ```sh
 # Replace 'sdd' drive by 'sdf' drive on 'node1' node
-$ replace.sh sdd sdf node1
+$ replace.sh node1 sdd sdf
 ```
 
 ### Remove drives
