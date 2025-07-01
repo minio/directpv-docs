@@ -45,3 +45,26 @@ jobs:
         compression-level: 9
         path: ./public/
       
+    - name: Staging
+      uses: burnett01/rsync-deployments@7.0.2
+      with:
+        path: ./public/
+        switches:  --mkpath -rv --delete
+        remote_path: ${{ secrets.DEPLOY_PATH }}/${{ github.event.pull_request.head.ref }}
+        remote_host: ${{ secrets.DEPLOY_HOST_STAGING }}
+        remote_port: ${{ secrets.DEPLOY_PORT }}
+        remote_user: ${{ secrets.DEPLOY_USER_STAGING }}
+        remote_key: ${{ secrets.DEPLOY_KEY_STAGING }}
+        remote_key_pass: ${{ secrets.DEPLOY_KEY_PASS_STAGING }}
+
+    - name: comment
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: "Staged at ${{ secrets.STAGING_URL }}/${{ github.event.pull_request.head.ref }}"
+          })
