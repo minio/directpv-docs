@@ -6,7 +6,7 @@ draft: false
 tableOfContents: true
 ---
 
-This set of pages describes DirectPV, a Container Storage Interface (CSI) for direct attached storage made by MinIO.
+This set of pages describes [MinIO DirectPV](https://github.com/minio/directpv), an AGPL3.0-licensed Container Storage Interface (CSI) for direct attached storage.
 
 DirectPV consists of two primary components:
 
@@ -70,5 +70,5 @@ Such additional layers of disaggregation result in increased complexity and poor
 
 ## External References
 
-- [MinIO Documentation](https://min.io/docs/minio/kubernetes/upstream/index.html?ref=DirectPV-Docs) 
+- [MinIO Object Store Documentation](https://docs.min.io/community/minio-object-store?jmp=docs-directpv) 
 - [Kubernetes CSI](https://kubernetes.io/blog/2019/01/15/container-storage-interface-ga/)

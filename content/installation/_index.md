@@ -8,6 +8,10 @@ heading: true
 weight: 10
 ---
 
+This guide installs the AGPL3.0-licensed MinIO DirectPV Container Storage Interface (CSI) on Kubernetes infrastructure.
+
+User's with [active subscriptions](https://subnet.min.io?jmp=docs-directpv) should use the [AIStor Volume Manager](https://docs.min.io/enterprise/aistor-volume-manager?jmp=docs-directpv) installation instructions instead.
+
 ## Prerequisites
 
 | Name                                                            | Version  |
